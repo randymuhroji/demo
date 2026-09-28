@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>iSalaam — Sistem Manajemen Masjid & Aplikasi Jamaah</title>
+<meta name="description" content="iSalaam menyatukan administrasi masjid, laporan keuangan, dan aplikasi jamaah dalam satu sistem berbasis cloud.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--e9:#062F24;--e8:#0A3F31;--e7:#0F5A45;--e6:#12805F;--mint:#E6F4EE;--gold:#E3B04B;--goldD:#8A5A0B;--goldS:#FCF3DF;--ink:#10201B;--mut:#56665F;--line:#E3E9E5;--bg:#F7F9F7}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+img,svg{max-width:100%}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:6px}
+.wrap{width:min(1160px,100% - 40px);margin-inline:auto}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:50px;padding:0 22px;border-radius:14px;font-weight:800;font-size:15px;text-decoration:none;border:0;cursor:pointer;font-family:inherit;transition:transform .15s ease,background-color .15s ease}
+.btn:active{transform:scale(.97)}
+.btn-gold{background:var(--gold);color:#3D2803}
+.btn-gold:hover{background:#EDBE5F}
+.btn-ghost{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.3)}
+.btn-ghost:hover{background:rgba(255,255,255,.16)}
+.btn-green{background:var(--e7);color:#fff}
+.btn-green:hover{background:var(--e8)}
+.btn-line{background:#fff;color:var(--e8);border:1px solid var(--line)}
+.btn-line:hover{border-color:var(--e6)}
+
+/* nav */
+header.top{position:absolute;inset:0 0 auto 0;z-index:20}
+.nav{display:flex;align-items:center;gap:28px;height:84px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:#fff}
+.brand .mk{width:42px;height:42px;border-radius:13px;background:var(--gold);color:var(--e8);display:grid;place-items:center}
+.brand b{font-size:21px;letter-spacing:-.4px}
+.nav ul{display:flex;gap:26px;list-style:none;margin:0 0 0 18px;padding:0}
+.nav ul a{color:#D4E6DD;text-decoration:none;font-weight:600;font-size:15px}
+.nav ul a:hover{color:#fff}
+.nav .sp{flex:1}
+.nav .app-link{color:#fff;font-weight:700;font-size:15px;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.nav .app-link:hover{text-decoration:underline;text-underline-offset:4px}
+.menu-btn{display:none;width:46px;height:46px;border-radius:12px;border:1px solid rgba(255,255,255,.3);background:transparent;color:#fff}
+.mnav{display:none}
+
+/* hero */
+.hero{position:relative;background:var(--e8);color:#fff;overflow:hidden;padding:150px 0 0}
+.hero .pat{position:absolute;inset:0;pointer-events:none}
+.hero .glow{position:absolute;width:620px;height:620px;border-radius:50%;background:var(--e6);opacity:.28;right:-160px;top:-180px}
+.hero-grid{position:relative;display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center;padding-bottom:40px}
+.hero h1{font-size:clamp(38px,5.2vw,64px);line-height:1.06;letter-spacing:-2px;margin:0 0 22px;font-weight:800;max-width:14ch}
+.hero p.lead{font-size:clamp(17px,1.6vw,19px);color:#CFE3DA;max-width:52ch;margin:0 0 34px}
+.hero .ctas{display:flex;gap:12px;flex-wrap:wrap}
+.hero .note{margin-top:26px;font-size:14px;color:#A9C6B9;display:flex;align-items:center;gap:10px}
+.hero .note .ar{font-family:'Amiri',serif;font-size:22px;color:#F1CF85}
+.skyline{position:relative;display:block;width:100%;height:auto;margin-top:-10px}
+
+/* phone mock */
+.stage{position:relative;height:560px}
+.phone{position:absolute;right:40px;top:0;width:290px;height:590px;border-radius:44px;background:#0B1512;padding:12px;box-shadow:0 50px 80px -30px rgba(0,0,0,.6)}
+.phone .scr{width:100%;height:100%;border-radius:34px;background:var(--bg);overflow:hidden;color:var(--ink)}
+.ph-head{position:relative;background:var(--e8);color:#fff;padding:22px 18px 70px;overflow:hidden}
+.ph-head small{color:#CFE3DA;font-size:11px;font-weight:600}
+.ph-time{font-size:40px;font-weight:800;letter-spacing:-1.5px;line-height:1.05}
+.ph-cd{display:inline-block;margin-top:6px;background:var(--gold);color:var(--e8);font-weight:800;border-radius:10px;padding:4px 10px;font-size:14px;font-variant-numeric:tabular-nums}
+.ph-strip{position:relative;margin:-50px 12px 0;background:#fff;border-radius:18px;padding:7px;display:grid;grid-template-columns:repeat(5,1fr);gap:2px;box-shadow:0 14px 28px -14px rgba(6,47,36,.4)}
+.ph-strip div{text-align:center;padding:7px 0;border-radius:12px;font-size:10px;font-weight:700}
+.ph-strip div b{display:block;font-size:12px}
+.ph-strip .on{background:var(--e7);color:#fff}
+.ph-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px 4px;padding:16px 12px}
+.ph-grid span{display:flex;flex-direction:column;align-items:center;gap:5px;font-size:10px;font-weight:700}
+.ph-grid i{width:42px;height:42px;border-radius:14px;display:grid;place-items:center}
+.ph-card{margin:0 12px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;font-size:11px}
+.ph-card .bar{height:6px;background:#EEF2EF;border-radius:9px;margin:8px 0 4px;overflow:hidden}
+.ph-card .bar i{display:block;height:6px;width:68%;background:var(--e6);border-radius:9px}
+.console-card{position:absolute;left:0;bottom:30px;width:300px;background:#fff;color:var(--ink);border-radius:20px;padding:18px;box-shadow:0 40px 70px -30px rgba(0,0,0,.55)}
+.console-card small{color:var(--mut);font-weight:600;font-size:12px}
+.console-card .v{font-size:24px;font-weight:800;letter-spacing:-.5px}
+.console-card .up{font-size:12px;font-weight:800;color:var(--e7);background:var(--mint);padding:3px 8px;border-radius:99px}
+
+/* sections */
+section{padding:110px 0}
+.sec-head{max-width:720px;margin-bottom:54px}
+.sec-head h2{font-size:clamp(30px,3.6vw,46px);line-height:1.1;letter-spacing:-1.2px;margin:0 0 16px}
+.sec-head p{font-size:18px;color:var(--mut);margin:0}
+
+.sides{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.side{border-radius:28px;padding:38px;display:flex;flex-direction:column;gap:22px}
+.side.admin{background:#fff;border:1px solid var(--line)}
+.side.jamaah{background:var(--e8);color:#fff;position:relative;overflow:hidden}
+.side h3{font-size:28px;letter-spacing:-.6px;margin:0;line-height:1.15}
+.side .who{font-size:15px;font-weight:700;color:var(--e6)}
+.side.jamaah .who{color:#F1CF85}
+.side ul{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.side li{display:flex;gap:14px;align-items:flex-start;font-size:16px}
+.side li i{flex-shrink:0;width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:var(--mint);color:var(--e7)}
+.side.jamaah li i{background:rgba(255,255,255,.1);color:#F1CF85}
+.side li b{display:block;font-size:16px}
+.side li span{color:var(--mut);font-size:14.5px}
+.side.jamaah li span{color:#BFD6CB}
+.side .act{margin-top:auto;display:flex;gap:10px;flex-wrap:wrap}
+
+.linkbox{position:relative;background:rgba(255,255,255,.08);border:1px dashed rgba(255,255,255,.35);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.linkbox label{font-size:13px;font-weight:700;color:#CFE3DA}
+.linkbox .row{display:flex;gap:8px}
+.linkbox input{flex:1;min-width:0;height:46px;border-radius:12px;border:0;padding:0 14px;font:600 14px 'Plus Jakarta Sans',sans-serif;color:var(--ink);background:#fff}
+.linkbox button{height:46px;padding:0 16px;border-radius:12px;border:0;font:800 14px 'Plus Jakarta Sans',sans-serif;background:var(--gold);color:#3D2803;cursor:pointer}
+.linkbox .wa{font-size:14px;font-weight:700;color:#fff}
+
+.gov{background:var(--e9);color:#fff;position:relative;overflow:hidden}
+.gov .sec-head p{color:#BFD6CB}
+.gov-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+.gov-panel{background:#fff;color:var(--ink);border-radius:24px;padding:26px;display:grid;gap:14px}
+.gov-row{display:grid;grid-template-columns:120px 1fr 44px;gap:12px;align-items:center;font-size:14px;font-weight:700}
+.gov-row .t{height:12px;background:#EEF2EF;border-radius:99px;overflow:hidden}
+.gov-row .t i{display:block;height:12px;background:var(--e6);border-radius:99px}
+.gov ul{list-style:none;padding:0;margin:0;display:grid;gap:18px}
+.gov li{display:flex;gap:14px}
+.gov li i{flex-shrink:0;width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.08);color:var(--gold);display:grid;place-items:center}
+.gov li b{display:block;font-size:17px}
+.gov li span{color:#BFD6CB;font-size:15px}
+
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;counter-reset:s}
+.step{background:#fff;border:1px solid var(--line);border-radius:24px;padding:30px;position:relative}
+.step .n{width:46px;height:46px;border-radius:14px;background:var(--gold);color:#3D2803;display:grid;place-items:center;font-weight:800;font-size:18px;margin-bottom:18px}
+.step h3{margin:0 0 8px;font-size:20px;letter-spacing:-.3px}
+.step p{margin:0;color:var(--mut)}
+
+.about{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:start}
+.about p{font-size:17px;color:#33433D;margin:0 0 16px}
+.facts{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line)}
+.facts div{padding:22px 0;border-bottom:1px solid var(--line)}
+.facts div:nth-child(odd){padding-right:20px;border-right:1px solid var(--line)}
+.facts div:nth-child(even){padding-left:24px}
+.facts b{display:block;font-size:34px;letter-spacing:-1px;color:var(--e8)}
+.facts span{color:var(--mut);font-size:15px}
+
+.cta{padding:0 0 110px}
+.cta-box{position:relative;overflow:hidden;background:var(--e8);color:#fff;border-radius:32px;padding:64px;display:grid;grid-template-columns:1.2fr .8fr;gap:30px;align-items:center}
+.cta-box h2{font-size:clamp(28px,3.4vw,42px);letter-spacing:-1px;line-height:1.1;margin:0 0 12px}
+.cta-box p{color:#CFE3DA;margin:0;font-size:17px}
+.cta-box .ctas{display:flex;flex-direction:column;gap:12px;align-items:stretch}
+
+footer{border-top:1px solid var(--line);padding:40px 0;color:var(--mut);font-size:14px}
+footer .row{display:flex;gap:30px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+footer nav{display:flex;gap:22px;flex-wrap:wrap}
+footer a{text-decoration:none}
+footer a:hover{color:var(--ink)}
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);opacity:0;background:var(--e8);color:#fff;padding:13px 18px;border-radius:14px;font-weight:600;font-size:14px;transition:.25s;pointer-events:none;z-index:50}
+.toast.show{opacity:1;transform:translateX(-50%)}
+
+@media (max-width:980px){
+  .nav ul,.nav .app-link,.nav .login{display:none}
+  .menu-btn{display:grid;place-items:center}
+  .mnav.open{display:flex;flex-direction:column;gap:6px;background:var(--e9);border-radius:18px;padding:14px;margin-bottom:10px}
+  .mnav a{color:#fff;text-decoration:none;font-weight:700;padding:12px;border-radius:10px}
+  .mnav a:hover{background:rgba(255,255,255,.08)}
+  .hero-grid,.sides,.gov-grid,.about,.cta-box{grid-template-columns:1fr}
+  .stage{height:520px;max-width:420px;margin:0 auto;width:100%}
+  .phone{right:0}
+  .steps{grid-template-columns:1fr}
+  .cta-box{padding:40px 28px}
+}
+@media (max-width:520px){
+  .console-card{width:230px;bottom:10px}
+  .phone{width:250px;height:510px}
+  .stage{height:480px}
+  .side{padding:26px}
+  section{padding:80px 0}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<header class="top">
+<div class="wrap">
+<div class="nav">
+<a class="brand" href="index.html" aria-label="iSalaam beranda"><span class="mk"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21h16M6 21v-7h12v7M12 4c3 2 5 4 5 7H7c0-3 2-5 5-7zM12 2v2"/></svg></span><b>iSalaam</b></a>
+<ul>
+<li><a href="#fitur">Fitur</a></li>
+<li><a href="#pemerintah">Untuk pemerintah</a></li>
+<li><a href="#mulai">Cara memulai</a></li>
+<li><a href="#tentang">Tentang</a></li>
+</ul>
+<span class="sp"></span>
+<a class="app-link" href="app.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></svg>Aplikasi jamaah</a>
+<a class="btn btn-gold login" href="login.html">Masuk ke Console</a>
+<button class="menu-btn" id="menuBtn" aria-label="Buka menu" aria-expanded="false"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+</div>
+<nav class="mnav" id="mnav" aria-label="Menu seluler">
+<a href="#fitur">Fitur</a><a href="#pemerintah">Untuk pemerintah</a><a href="#mulai">Cara memulai</a><a href="#tentang">Tentang</a>
+<a href="app.html">Aplikasi jamaah</a><a href="login.html" style="background:var(--gold);color:#3D2803">Masuk ke Console</a>
+</nav>
+</div>
+</header>
+
+<main>
+<section class="hero" aria-labelledby="h1">
+<svg class="pat" aria-hidden="true" width="100%" height="100%"><defs><pattern id="geo" width="56" height="56" patternUnits="userSpaceOnUse"><path d="M28 5l7 16 16 7-16 7-7 16-7-16-16-7 16-7z" fill="none" stroke="#fff" stroke-opacity=".07" stroke-width="1.2"/><rect x="18" y="18" width="20" height="20" transform="rotate(45 28 28)" fill="none" stroke="#fff" stroke-opacity=".05"/></pattern></defs><rect width="100%" height="100%" fill="url(#geo)"/></svg>
+<div class="glow" aria-hidden="true"></div>
+<div class="wrap hero-grid">
+<div>
+<h1 id="h1">Kelola masjid dan layani jamaah dari satu tempat.</h1>
+<p class="lead">iSalaam menyatukan administrasi masjid, laporan keuangan yang transparan, dan aplikasi untuk jamaah dalam satu sistem berbasis cloud, terhubung dengan Satu Data Masjid Indonesia.</p>
+<div class="ctas">
+<a class="btn btn-gold" href="login.html">Masuk ke Console</a>
+<a class="btn btn-ghost" href="app.html">Buka aplikasi jamaah</a>
+</div>
+<div class="note"><span class="ar">إِنَّمَا يَعْمُرُ مَسَاجِدَ ٱللَّهِ</span><span>Memakmurkan masjid, dimulai dari pengelolaan yang baik.</span></div>
+</div>
+<div class="stage" aria-hidden="true">
+<div class="phone"><div class="scr">
+<div class="ph-head">
+<svg width="300" height="220" style="position:absolute;inset:0"><rect width="300" height="220" fill="url(#geo)"/></svg>
+<div style="position:relative">
+<small>Menuju salat <span id="pName">Ashar</span></small>
+<div class="ph-time" id="pTime">14:55</div>
+<span class="ph-cd" id="pCd">00:00:00</span>
+</div>
+</div>
+<div class="ph-strip" id="pStrip"></div>
+<div class="ph-grid">
+<span><i style="background:#E6F4EE;color:#0F5A45"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></i>Jadwal</span>
+<span><i style="background:#E6F0FB;color:#1F5E9E"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg></i>Kiblat</span>
+<span><i style="background:#EFEAFB;color:#5B3FA8"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="2"/><circle cx="7" cy="9" r="2"/><circle cx="17" cy="9" r="2"/><circle cx="8" cy="15" r="2"/><circle cx="16" cy="15" r="2"/></svg></i>Tasbih</span>
+<span><i style="background:#E3B04B;color:#3D2803"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/></svg></i>Donasi</span>
+</div>
+<div class="ph-card"><b style="font-size:12px">Renovasi tempat wudu</b><div class="bar"><i></i></div><span style="color:#56665F">Rp 34 jt dari Rp 50 jt</span></div>
+</div></div>
+<div class="console-card">
+<div style="display:flex;justify-content:space-between;align-items:center"><small>Donasi bulan ini</small><span class="up">naik 8,6%</span></div>
+<div class="v">Rp 47,92 jt</div>
+<svg width="100%" height="60" viewBox="0 0 260 60" preserveAspectRatio="none"><defs><linearGradient id="cg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#12805F" stop-opacity=".25"/><stop offset="1" stop-color="#12805F" stop-opacity="0"/></linearGradient></defs><path d="M0 44 C26 44 26 38 52 38 C78 38 78 18 104 18 C130 18 130 48 156 48 C182 48 182 30 208 30 C234 30 234 24 260 24 L260 60 L0 60Z" fill="url(#cg)"/><path d="M0 44 C26 44 26 38 52 38 C78 38 78 18 104 18 C130 18 130 48 156 48 C182 48 182 30 208 30 C234 30 234 24 260 24" fill="none" stroke="#12805F" stroke-width="3"/></svg>
+</div>
+</div>
+</div>
+<svg class="skyline" viewBox="0 0 1440 150" preserveAspectRatio="none" aria-hidden="true"><path fill="#0F5A45" d="M0 150V118h120V70l8-14 8 14v48h70v-22c0-24 22-40 46-50 24 10 46 26 46 50v22h60V88c0-38 46-64 96-82 50 18 96 44 96 82v30h60v-22c0-24 22-40 46-50 24 10 46 26 46 50v22h70V70l8-14 8 14v48h120v-16c0-18 16-30 34-38 18 8 34 20 34 38v16h110V60l8-14 8 14v58h150v32z"/><path fill="#F7F9F7" d="M0 150v-10h1440v10z"/></svg>
+</section>
+
+<section id="fitur" aria-labelledby="fitur-h">
+<div class="wrap">
+<div class="sec-head">
+<h2 id="fitur-h">Dua sisi yang saling terhubung.</h2>
+<p>Apa pun yang pengurus perbarui di console langsung sampai ke ponsel jamaah: jadwal kajian, laporan kas, sampai program donasi.</p>
+</div>
+<div class="sides">
+<article class="side admin">
+<div><div class="who">Untuk pengurus masjid (DKM)</div><h3>Console iSalaam</h3></div>
+<ul>
+<li><i><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="14" rx="3"/><path d="M3 10h18M16 15h2"/></svg></i><div><b>Keuangan dan donasi</b><span>Buku kas, donasi QRIS/e-wallet/VA tercatat otomatis, laporan bulanan sekali klik.</span></div></li>
+<li><i><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="3"/><path d="M4 10h16M9 3v4M15 3v4"/></svg></i><div><b>Kegiatan dan kajian</b><span>Terbitkan acara, kirim notifikasi ke jamaah, dan catat kehadiran lewat QR.</span></div></li>
+<li><i><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l8-4 8 4v8l-8 4-8-4z"/><path d="M4 8l8 4 8-4M12 12v8"/></svg></i><div><b>Inventaris dan fasilitas</b><span>Pantau kondisi barang dan setujui peminjaman aula, ambulans, atau ruang TPA.</span></div></li>
+</ul>
+<div class="act"><a class="btn btn-green" href="login.html">Masuk ke Console</a></div>
+</article>
+<article class="side jamaah">
+<div><div class="who">Untuk jamaah</div><h3>Aplikasi iSalaam</h3></div>
+<ul>
+<li><i><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></i><div><b>Ibadah harian</b><span>Jadwal salat, arah kiblat, tasbih digital, dan Al-Qur'an.</span></div></li>
+<li><i><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/></svg></i><div><b>Donasi dan zakat</b><span>Kalkulator zakat dan donasi langsung ke masjid pilihan.</span></div></li>
+<li><i><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21h16M6 21v-7h12v7M12 4c3 2 5 4 5 7H7c0-3 2-5 5-7zM12 2v2"/></svg></i><div><b>Masjid terdekat</b><span>Ikuti masjid, lihat jadwal kajian, dan daftar kegiatan.</span></div></li>
+</ul>
+<div class="linkbox">
+<label for="appUrl">Link khusus untuk jamaah, bagikan di grup masjid</label>
+<div class="row"><input id="appUrl" readonly value="app.html"><button id="copyBtn" type="button">Salin</button></div>
+<a class="wa" id="waLink" href="#" target="_blank" rel="noopener">Bagikan lewat WhatsApp</a>
+</div>
+<div class="act"><a class="btn btn-gold" href="app.html">Buka aplikasi jamaah</a></div>
+</article>
+</div>
+</div>
+</section>
+
+<section id="pemerintah" class="gov" aria-labelledby="gov-h">
+<svg class="pat" aria-hidden="true" width="100%" height="100%" style="position:absolute;inset:0"><rect width="100%" height="100%" fill="url(#geo)"/></svg>
+<div class="wrap" style="position:relative">
+<div class="gov-grid">
+<div>
+<div class="sec-head" style="margin-bottom:34px">
+<h2 id="gov-h">Satu Data Masjid Indonesia, dari data yang dikelola masjid sendiri.</h2>
+<p>Panel khusus kementerian dan Kanwil untuk memantau data masjid lintas wilayah secara langsung, tanpa rekap manual.</p>
+</div>
+<ul>
+<li><i><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></i><div><b>Verifikasi masjid</b><span>Tinjau pengajuan dan tetapkan status terverifikasi.</span></div></li>
+<li><i><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg></i><div><b>Dasbor per provinsi</b><span>Cakupan data, kapasitas, dan fasilitas dalam satu tampilan.</span></div></li>
+</ul>
+</div>
+<div class="gov-panel" aria-label="Contoh cakupan verifikasi">
+<b style="font-size:16px">Cakupan verifikasi (contoh)</b>
+<div class="gov-row"><span>DKI Jakarta</span><span class="t"><i style="width:91%"></i></span><span>91%</span></div>
+<div class="gov-row"><span>Banten</span><span class="t"><i style="width:82%"></i></span><span>82%</span></div>
+<div class="gov-row"><span>Jawa Tengah</span><span class="t"><i style="width:74%"></i></span><span>74%</span></div>
+<div class="gov-row"><span>Jawa Barat</span><span class="t"><i style="width:68%"></i></span><span>68%</span></div>
+<div class="gov-row"><span>Jawa Timur</span><span class="t"><i style="width:63%"></i></span><span>63%</span></div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="mulai" aria-labelledby="mulai-h">
+<div class="wrap">
+<div class="sec-head"><h2 id="mulai-h">Mulai dalam tiga langkah.</h2><p>Tim kami mendampingi dari pendaftaran sampai masjid Anda berjalan sepenuhnya secara digital.</p></div>
+<div class="steps">
+<div class="step"><div class="n">1</div><h3>Daftarkan masjid</h3><p>Isi profil masjid dan data pengurus. Masjid otomatis masuk antrean verifikasi SDMI.</p></div>
+<div class="step"><div class="n">2</div><h3>Atur console</h3><p>Hubungkan rekening donasi, masukkan saldo awal, dan jadwalkan kajian rutin.</p></div>
+<div class="step"><div class="n">3</div><h3>Undang jamaah</h3><p>Bagikan link aplikasi jamaah di grup WhatsApp atau cetak kode QR di papan pengumuman.</p></div>
+</div>
+</div>
+</section>
+
+<section id="tentang" style="padding-top:20px" aria-labelledby="tentang-h">
+<div class="wrap about">
+<div>
+<div class="sec-head" style="margin-bottom:24px"><h2 id="tentang-h">Dibangun bersama mitra Indonesia.</h2></div>
+<p>iSalaam dikembangkan oleh Advent Global Solutions, perusahaan teknologi enterprise asal Amerika Serikat, bersama mitra lokal yang memahami kebutuhan masjid dan jamaah di Indonesia.</p>
+<p>Advent menangani platform dan dukungan teknis. Mitra Indonesia memegang pengembangan bisnis, kemitraan dengan pemerintah, dan pendampingan masjid di lapangan.</p>
+</div>
+<div class="facts">
+<div><b>30+ tahun</b><span>pengalaman teknologi enterprise</span></div>
+<div><b>1.000+</b><span>proyek terselesaikan</span></div>
+<div><b>100+</b><span>klien Fortune</span></div>
+<div><b>1.500+</b><span>anggota tim di AS, India, dan Indonesia</span></div>
+</div>
+</div>
+</section>
+
+<section class="cta" aria-label="Ajakan">
+<div class="wrap">
+<div class="cta-box">
+<svg aria-hidden="true" width="100%" height="100%" style="position:absolute;inset:0"><rect width="100%" height="100%" fill="url(#geo)"/></svg>
+<div style="position:relative"><h2>Siap membawa masjid Anda ke era digital?</h2><p>Masuk ke console untuk mencoba, atau hubungi tim kami untuk pendampingan.</p></div>
+<div class="ctas" style="position:relative">
+<a class="btn btn-gold" href="login.html">Masuk ke Console</a>
+<a class="btn btn-ghost" href="mailto:[email@isalaam.id]">Hubungi tim iSalaam</a>
+</div>
+</div>
+</div>
+</section>
+</main>
+
+<footer>
+<div class="wrap row">
+<div style="display:flex;align-items:center;gap:10px;color:var(--ink);font-weight:800"><span style="width:32px;height:32px;border-radius:10px;background:var(--e8);color:var(--gold);display:grid;place-items:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21h16M6 21v-7h12v7M12 4c3 2 5 4 5 7H7c0-3 2-5 5-7zM12 2v2"/></svg></span>iSalaam</div>
+<nav aria-label="Tautan kaki"><a href="#fitur">Fitur</a><a href="app.html">Aplikasi jamaah</a><a href="login.html">Console</a><a href="mailto:[email@isalaam.id]">Kontak</a></nav>
+<div>© 2026 iSalaam, Advent Global Solutions</div>
+</div>
+</footer>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+  var btn=document.getElementById('menuBtn'),m=document.getElementById('mnav');
+  btn.addEventListener('click',function(){var o=m.classList.toggle('open');btn.setAttribute('aria-expanded',o);});
+  m.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){m.classList.remove('open');btn.setAttribute('aria-expanded','false');});});
+
+  var url=new URL('app.html',location.href).href;
+  var inp=document.getElementById('appUrl');inp.value=url;
+  document.getElementById('waLink').href='https://wa.me/?text='+encodeURIComponent('Assalamu\'alaikum, yuk pakai aplikasi jamaah iSalaam untuk jadwal salat, kajian, dan donasi masjid: '+url);
+  var t=document.getElementById('toast'),tt;
+  function toast(s){t.textContent=s;t.classList.add('show');clearTimeout(tt);tt=setTimeout(function(){t.classList.remove('show');},2200);}
+  document.getElementById('copyBtn').addEventListener('click',function(){
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(url).then(function(){toast('Link aplikasi jamaah disalin');},function(){inp.select();toast('Tekan Ctrl+C untuk menyalin');});}
+    else{inp.select();try{document.execCommand('copy');toast('Link aplikasi jamaah disalin');}catch(e){toast('Tekan Ctrl+C untuk menyalin');}}
+  });
+
+  var PR=[['Subuh','04:31'],['Dzuhur','11:46'],['Ashar','14:55'],['Maghrib','17:51'],['Isya','19:00']];
+  function sec(h){var p=h.split(':');return p[0]*3600+p[1]*60;}
+  function pad(n){return String(n).padStart(2,'0');}
+  var strip=document.getElementById('pStrip');
+  function tick(){
+    var d=new Date(),now=d.getHours()*3600+d.getMinutes()*60+d.getSeconds();
+    var i=PR.findIndex(function(p){return sec(p[1])>now;}),ns;
+    if(i<0){i=0;ns=sec(PR[0][1])+86400;}else ns=sec(PR[i][1]);
+    var df=ns-now;
+    document.getElementById('pName').textContent=PR[i][0];
+    document.getElementById('pTime').textContent=PR[i][1];
+    document.getElementById('pCd').textContent=pad(Math.floor(df/3600))+':'+pad(Math.floor(df%3600/60))+':'+pad(df%60);
+    strip.innerHTML=PR.map(function(p,k){return '<div class="'+(k===i?'on':'')+'">'+p[0]+'<b>'+p[1]+'</b></div>';}).join('');
+  }
+  tick();setInterval(tick,1000);
+})();
+</script>
+</body>
+</html>
