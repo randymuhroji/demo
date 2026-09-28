@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%230F5A45'/%3E%3Cg transform='translate(18 16) scale(.64)'%3E%3Cpath fill='%23fff' fill-rule='evenodd' d='M50%205C29.6%205%2015%2020.4%2015%2040.2%2015%2065%2050%2095%2050%2095s35-30%2035-54.8C85%2020.4%2070.4%205%2050%205zM37.5%2061V43.5c0-9%205.6-15.6%2012.5-21%206.9%205.4%2012.5%2012%2012.5%2021V61z'/%3E%3Ccircle cx='50' cy='45' r='4.6' fill='%23E3B04B'/%3E%3C/g%3E%3C/svg%3E">
+<meta name="theme-color" content="#0A3F31">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Kiblatku — Aplikasi Jamaah</title>
+<meta name="description" content="Jadwal salat, kiblat, tasbih, Al-Qur'an, kajian, dan donasi masjid dalam satu aplikasi.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--e9:#062F24;--e8:#0A3F31;--e7:#0F5A45;--e6:#12805F;--mint:#E6F4EE;--gold:#E3B04B;--goldD:#8A5A0B;--goldS:#FCF3DF;--sky:#E6F0FB;--skyD:#1F5E9E;--vio:#EFEAFB;--vioD:#5B3FA8;--teal:#E2F4F4;--tealD:#146B6B;--rose:#FBE9EC;--roseD:#A3324A;--ink:#10201B;--mut:#56665F;--line:#E5EBE7;--bg:#F4F7F5;--sh:0 12px 28px -20px rgba(6,47,36,.35)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{margin:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:var(--ink);background:#E9EEEA;-webkit-font-smoothing:antialiased}
+button,input{font-family:inherit}
+button{cursor:pointer;transition:transform .12s ease,background-color .15s ease;color:inherit}
+button:active{transform:scale(.96)}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.ar{font-family:'Amiri',serif;direction:rtl}
+.sr{position:absolute;left:-9999px}
+/* shell */
+.shell{min-height:100%;display:flex;align-items:center;justify-content:center;gap:70px;padding:30px}
+.intro{max-width:340px}
+.intro .brand{display:flex;align-items:center;gap:12px;color:var(--e8);text-decoration:none;margin-bottom:26px}
+.intro .brand i{width:44px;height:44px;border-radius:14px;background:var(--e8);color:var(--gold);display:grid;place-items:center}
+.intro .brand{gap:10px}
+.wm{font-weight:800;letter-spacing:-.04em;line-height:1;font-style:normal}
+.splash{position:absolute;inset:0;z-index:40;background:var(--e8);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;color:#fff;overflow:hidden;transition:opacity .45s ease,visibility .45s}
+.splash.hide{opacity:0;visibility:hidden}
+.splash .tg{position:absolute;bottom:calc(110px + env(safe-area-inset-bottom,0px));font-size:12px;font-weight:600;color:#CFE3DA}
+@keyframes pop{from{transform:scale(.85);opacity:0}to{transform:none;opacity:1}}
+.splash .logo-mk{animation:pop .5s ease both}
+@media (prefers-reduced-motion:reduce){.splash .logo-mk{animation:none}}
+.intro h1{font-size:34px;line-height:1.1;letter-spacing:-1px;margin:0 0 14px;color:var(--e8)}
+.intro p{color:var(--mut);margin:0 0 22px;line-height:1.6}
+.intro .lnk{display:flex;gap:8px;margin-bottom:14px}
+.intro input{flex:1;min-width:0;height:46px;border:1px solid var(--line);border-radius:12px;padding:0 12px;font-size:13px;font-weight:600;background:#fff;color:var(--ink)}
+.intro .cp{height:46px;border:0;border-radius:12px;padding:0 16px;background:var(--e7);color:#fff;font-weight:800}
+.intro a.back{color:var(--e7);font-weight:700;text-decoration:none;font-size:14px}
+.intro a.back:hover{text-decoration:underline}
+.device{width:414px;height:868px;border-radius:52px;background:#0B1512;padding:12px;box-shadow:0 60px 90px -40px rgba(6,47,36,.55);flex-shrink:0}
+.screen{position:relative;width:390px;height:844px;border-radius:40px;overflow:hidden;background:var(--bg)}
+.scroll{position:absolute;inset:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none}
+.scroll::-webkit-scrollbar{display:none}
+@media (max-width:900px){.intro{display:none}}
+@media (max-width:600px),(max-height:700px) and (max-width:900px){
+  body{background:var(--bg)}
+  .shell{padding:0;display:block;min-height:100%}
+  .device{width:100%;height:100vh;height:100dvh;border-radius:0;padding:0;box-shadow:none;background:var(--bg)}
+  .screen{width:100%;height:100%;border-radius:0}
+}
+/* common */
+.pad{padding:4px 16px 120px;display:flex;flex-direction:column;gap:14px}
+.hdr{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:12px;padding:calc(16px + env(safe-area-inset-top,0px)) 16px 12px;background:rgba(244,247,245,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.hdr h1{margin:0;font-size:26px;font-weight:800;color:var(--e8);letter-spacing:-.5px;line-height:1.15}
+.hdr.sm h1{font-size:20px}
+.hdr small{font-size:12px;color:var(--mut);font-weight:600}
+.ib{width:44px;height:44px;border:1px solid var(--line);background:#fff;border-radius:14px;display:grid;place-items:center;color:var(--e8);box-shadow:0 4px 12px -6px rgba(15,50,40,.2);flex-shrink:0}
+.card{background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:var(--sh)}
+.dark{position:relative;overflow:hidden;background:var(--e8);color:#fff;border-radius:24px}
+.dark>*:not(.pat):not(.glow){position:relative}
+.pat{position:absolute;inset:0;pointer-events:none}
+.glow{position:absolute;border-radius:50%;background:var(--e6);opacity:.38;pointer-events:none}
+.sec-t{font-size:17px;font-weight:800;letter-spacing:-.3px}
+.btn{min-height:52px;border:0;border-radius:16px;font-size:16px;font-weight:800;width:100%}
+.btn.gold{background:var(--gold);color:#3D2803;box-shadow:0 12px 24px -12px rgba(227,176,75,.9)}
+.btn.green{background:var(--e7);color:#fff;box-shadow:0 12px 24px -12px rgba(15,90,69,.8)}
+.btn.line{background:#fff;border:1px solid #DCE3DF;color:var(--e8);font-size:14px}
+.seg{display:flex;background:#E9EEEB;border-radius:16px;padding:4px;gap:4px}
+.seg button{flex:1;min-height:42px;border:0;border-radius:12px;font-size:13px;font-weight:800;background:transparent;color:var(--mut)}
+.seg button.on{background:#fff;color:var(--e8);box-shadow:0 2px 6px rgba(15,50,40,.15)}
+.money{display:flex;align-items:center;gap:8px;border:1px solid #DCE3DF;border-radius:14px;padding:0 14px;background:#FAFCFB}
+.money:focus-within{border-color:var(--e6);box-shadow:0 0 0 4px rgba(18,128,95,.12)}
+.money b{color:var(--mut)}
+.money input{flex:1;min-width:0;border:0;background:transparent;padding:14px 0;font-size:18px;font-weight:700;outline:0;color:var(--ink)}
+.lbl{font-size:13px;font-weight:700;color:#3A4A44}
+.ico{display:grid;place-items:center;flex-shrink:0}
+/* home */
+.hero{position:relative;background:var(--e8);color:#fff;padding:calc(20px + env(safe-area-inset-top,0px)) 20px 96px;overflow:hidden;border-radius:0 0 34px 34px}
+.hero .sky{position:absolute;left:0;bottom:0;width:100%;height:90px}
+.hero>*:not(.pat):not(.glow):not(.sky){position:relative}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;background:rgba(255,255,255,.1);padding:7px 11px;border-radius:99px}
+.big{font-size:46px;font-weight:800;letter-spacing:-1.5px;line-height:1.05}
+.cd{font-size:18px;font-weight:800;color:var(--e8);background:var(--gold);padding:7px 12px;border-radius:12px;font-variant-numeric:tabular-nums}
+.strip{position:relative;margin:-70px 16px 0;background:#fff;border-radius:24px;padding:10px;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;box-shadow:0 18px 40px -18px rgba(6,47,36,.35);border:1px solid var(--line)}
+.strip button{border:0;border-radius:16px;padding:10px 2px;background:transparent;display:flex;flex-direction:column;align-items:center;gap:4px}
+.strip button span{font-size:11px;font-weight:700;opacity:.85}.strip button b{font-size:14px}
+.strip button.on{background:var(--e7);color:#fff}
+.qgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px 6px}
+.qgrid button{border:0;background:transparent;display:flex;flex-direction:column;align-items:center;gap:8px;font-size:12px;font-weight:700;color:#22342D}
+.qgrid i{width:58px;height:58px;border-radius:20px;display:grid;place-items:center}
+.hscroll{display:flex;gap:12px;overflow-x:auto;padding:0 16px 6px;scrollbar-width:none;scroll-snap-type:x mandatory}
+.hscroll::-webkit-scrollbar{display:none}
+.camp{flex-shrink:0;width:256px;overflow:hidden;scroll-snap-align:start}
+.camp .top{position:relative;height:104px;overflow:hidden}
+.tag{position:absolute;top:12px;left:12px;font-size:11px;font-weight:800;background:#fff;padding:4px 9px;border-radius:99px}
+.prog{height:8px;background:#EEF2EF;border-radius:99px;overflow:hidden}
+.prog i{display:block;height:100%;border-radius:99px}
+.sbtn{border:0;background:var(--e7);color:#fff;padding:9px 14px;border-radius:11px;font-size:12px;font-weight:800;min-height:36px}
+.row{display:flex;align-items:center;gap:14px}
+.cal{width:58px;height:62px;flex-shrink:0;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.cal b{font-size:22px;line-height:1}.cal span{font-size:11px;font-weight:800}
+/* tabbar */
+.tabbar{position:absolute;left:14px;right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));height:70px;background:#fff;border-radius:26px;border:1px solid var(--line);box-shadow:0 18px 40px -14px rgba(6,47,36,.35);display:grid;grid-template-columns:repeat(5,1fr);align-items:center;z-index:10}
+.tabbar button{border:0;background:transparent;height:70px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:11px;font-weight:600;color:#6F7F79}
+.tabbar button i{width:4px;height:4px;border-radius:50%;background:transparent}
+.tabbar button.on{color:var(--e7);font-weight:800}
+.tabbar button.on i{background:var(--gold)}
+.tabbar .fab{justify-self:center;width:60px;height:60px;margin-top:-34px;border-radius:22px;border:5px solid var(--bg);background:var(--e7);color:var(--gold);box-shadow:0 14px 26px -10px rgba(15,90,69,.8)}
+.toast{position:absolute;left:16px;right:16px;bottom:calc(100px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;gap:10px;background:var(--e8);color:#fff;padding:13px 14px;border-radius:16px;font-size:13px;font-weight:600;box-shadow:0 16px 36px -10px rgba(6,47,36,.55);opacity:0;transform:translateY(12px);transition:.22s;pointer-events:none;z-index:20}
+.toast.show{opacity:1;transform:none}
+.toast i{width:24px;height:24px;flex-shrink:0;border-radius:50%;background:var(--gold);color:var(--e8);display:grid;place-items:center}
+/* lists */
+.item{border:1px solid var(--line);background:#fff;border-radius:20px;padding:12px;display:flex;gap:14px;align-items:center;text-align:left;width:100%;box-shadow:var(--sh)}
+.item .t{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}
+.item .t b{font-size:15px}.item .t small{font-size:12px;color:var(--mut)}
+.pill{font-size:11px;font-weight:800;padding:3px 8px;border-radius:99px}
+.check{width:44px;height:44px;border-radius:50%;border:2px solid #AEBBB5;background:#fff;display:grid;place-items:center;color:#fff;flex-shrink:0}
+.check.on{background:var(--e7);border-color:var(--e7)}
+.opt{display:flex;align-items:center;gap:12px;padding:14px;border-radius:18px;border:2px solid var(--line);background:#fff;text-align:left;width:100%}
+.opt.on{border-color:var(--e7)}
+.radio{width:22px;height:22px;border-radius:50%;border:2px solid #AEBBB5;display:grid;place-items:center;flex-shrink:0}
+.opt.on .radio{border-color:var(--e7)}.opt.on .radio::after{content:'';width:10px;height:10px;border-radius:50%;background:var(--e7)}
+.amts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.amts button{min-height:52px;border-radius:16px;border:2px solid var(--line);background:#fff;font-size:14px;font-weight:800}
+.amts button.on{border-color:var(--e7);background:var(--e7);color:#fff}
+.mchip{flex-shrink:0;width:132px;padding:12px;border-radius:18px;border:2px solid var(--line);background:#fff;display:flex;flex-direction:column;align-items:flex-start;gap:8px;text-align:left}
+.mchip.on{border-color:var(--e7);background:#F1F8F4}
+.fchip{min-height:40px;padding:0 16px;border-radius:99px;border:1px solid #DCE3DF;background:#fff;font-size:13px;font-weight:800;color:#3A4A44}
+.fchip.on{background:var(--e7);border-color:var(--e7);color:#fff}
+.toggle{width:54px;height:32px;border-radius:99px;border:0;background:#AEBBB5;position:relative;padding:0}
+.toggle::after{content:'';position:absolute;top:4px;left:4px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 2px 4px rgba(0,0,0,.2);transition:left .2s}
+.toggle[aria-pressed="true"]{background:var(--e7)}.toggle[aria-pressed="true"]::after{left:26px}
+.star{position:relative;width:42px;height:42px;flex-shrink:0;color:var(--e7)}
+.star svg{position:absolute;inset:0}.star span{position:absolute;inset:0;display:grid;place-items:center;font-size:12px;font-weight:800}
+.kv{display:flex;justify-content:space-between;font-size:14px;gap:10px}.kv span{color:var(--mut)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="shell">
+<aside class="intro">
+<a class="brand" href="index.html" aria-label="Kiblatku, beranda"><svg class="logo-mk" width="42" height="42" viewBox="0 0 100 100" aria-hidden="true"><path fill="#0A3F31" fill-rule="evenodd" d="M50 5C29.6 5 15 20.4 15 40.2 15 65 50 95 50 95s35-30 35-54.8C85 20.4 70.4 5 50 5zM37.5 61V43.5c0-9 5.6-15.6 12.5-21 6.9 5.4 12.5 12 12.5 21V61z"/><circle cx="50" cy="45" r="4.6" fill="#B07D1E"/></svg><b class="wm" style="color:#0A3F31;font-size:26px">kiblat<span style="color:#B07D1E">ku</span></b></a>
+<h1>Aplikasi jamaah, langsung dari browser.</h1>
+<p>Buka link ini di ponsel untuk tampilan penuh. Di Android dan iPhone, pilih "Tambahkan ke Layar Utama" agar terasa seperti aplikasi.</p>
+<div class="lnk"><label class="sr" for="selfUrl">Link aplikasi jamaah</label><input id="selfUrl" readonly><button class="cp" id="cpSelf">Salin</button></div>
+<a class="back" href="index.html">Kembali ke halaman utama</a>
+</aside>
+<div class="device">
+<div class="screen" id="screen">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><pattern id="geo" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M24 4l6 14 14 6-14 6-6 14-6-14-14-6 14-6z" fill="none" stroke="#fff" stroke-opacity=".07" stroke-width="1.2"/><rect x="15" y="15" width="18" height="18" transform="rotate(45 24 24)" fill="none" stroke="#fff" stroke-opacity=".05"/></pattern></defs></svg>
+<main class="scroll" id="scroll"></main>
+<div class="splash" id="splash" aria-hidden="true"><svg class="pat" width="100%" height="100%"><rect width="100%" height="100%" fill="url(#geo)"/></svg><div class="glow" style="top:-80px;right:-80px;width:260px;height:260px"></div><svg viewBox="0 0 390 90" preserveAspectRatio="none" style="position:absolute;left:0;bottom:0;width:100%;height:90px"><path fill="#0F5A45" d="M0 90V70h30V40l4-8 4 8v30h20V60c0-14 12-24 26-30 14 6 26 16 26 30v10h20V52c0-22 26-38 55-48 29 10 55 26 55 48v18h20V60c0-14 12-24 26-30 14 6 26 16 26 30v10h20V40l4-8 4 8v30h50v20z"/></svg><span style="position:relative"><svg class="logo-mk" width="110" height="110" viewBox="0 0 100 100" aria-hidden="true"><path fill="#FFFFFF" fill-rule="evenodd" d="M50 5C29.6 5 15 20.4 15 40.2 15 65 50 95 50 95s35-30 35-54.8C85 20.4 70.4 5 50 5zM37.5 61V43.5c0-9 5.6-15.6 12.5-21 6.9 5.4 12.5 12 12.5 21V61z"/><circle cx="50" cy="45" r="4.6" fill="#E3B04B"/></svg></span><span style="position:relative"><b class="wm" style="color:#FFFFFF;font-size:38px">kiblat<span style="color:#E3B04B">ku</span></b></span><span class="tg">Masjid tertata, jamaah terhubung.</span></div>
+<nav class="tabbar" aria-label="Navigasi utama" id="tabbar"></nav>
+<div class="toast" id="toast" role="status"><i></i><span id="toastT"></span></div>
+</div>
+</div>
+</div>
+
+<script>
+(function(){
+var P={
+home:'<path d="M4 11l8-7 8 7v9a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1z"/>',
+mosque:'<path d="M4 21h16M6 21v-7h12v7M12 4c3 2 5 4 5 7H7c0-3 2-5 5-7zM12 2v2"/>',
+heart:'<path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/>',
+cal:'<rect x="4" y="5" width="16" height="16" rx="3"/><path d="M4 10h16M9 3v4M15 3v4"/>',
+clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+compass:'<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>',
+beads:'<circle cx="12" cy="5" r="2"/><circle cx="7" cy="9" r="2"/><circle cx="17" cy="9" r="2"/><circle cx="8" cy="15" r="2"/><circle cx="16" cy="15" r="2"/><path d="M12 17v4"/>',
+book:'<path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/>',
+calc:'<rect x="5" y="3" width="14" height="18" rx="3"/><path d="M8 7h8M8 12h2M14 12h2M8 16h2M14 16h2"/>',
+user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+back:'<path d="M15 5l-7 7 7 7"/>',chev:'<path d="M9 5l7 7-7 7"/>',check:'<path d="M5 12l5 5 9-10"/>',
+bell:'<path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 20a2 2 0 0 0 4 0"/>',
+search:'<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>',
+pin:'<path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/>',
+qr:'<rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><path d="M14 14h3v3M20 14v6h-6"/>',
+share:'<circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4"/>',
+shield:'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/>',
+sun:'<circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/>',
+info:'<circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/>'
+};
+function ic(n,s,w){return '<svg width="'+(s||20)+'" height="'+(s||20)+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="'+(w||2)+'" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+P[n]+'</svg>';}
+var SKY='<path fill="#0F5A45" d="M0 90V70h30V40l4-8 4 8v30h20V60c0-14 12-24 26-30 14 6 26 16 26 30v10h20V52c0-22 26-38 55-48 29 10 55 26 55 48v18h20V60c0-14 12-24 26-30 14 6 26 16 26 30v10h20V40l4-8 4 8v30h50v20z"/>';
+var PAT='<svg class="pat" width="100%" height="100%" aria-hidden="true"><rect width="100%" height="100%" fill="url(#geo)"/></svg>';
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function rp(n){return 'Rp '+Math.round(n).toLocaleString('id-ID');}
+function digits(v){return parseInt(String(v).replace(/\D/g,''),10)||0;}
+function pad(n){return String(n).padStart(2,'0');}
+function fmt(n){return n?n.toLocaleString('id-ID'):'';}
+
+document.querySelector('#toast i').innerHTML=ic('check',14,3);
+var self=location.href.split('#')[0];var su=document.getElementById('selfUrl');su.value=self;
+document.getElementById('cpSelf').onclick=function(){if(navigator.clipboard)navigator.clipboard.writeText(self).then(function(){toast('Link disalin');});else{su.select();document.execCommand('copy');toast('Link disalin');}};
+
+var S={screen:'home',count:0,dz:0,rounds:0,done:{},zType:'income',zA:0,zB:0,q:'',mFilter:'all',masjid:'m1',followed:{m1:true},amount:50000,custom:0,method:'qris',cat:'Infaq',donCount:0,joined:{},checkedIn:false,surah:1,notif:true};
+try{var saved=JSON.parse(localStorage.getItem('kiblatku_jamaah')||'null');if(saved){['done','followed','joined','rounds','notif','donCount','doneDay'].forEach(function(k){if(k in saved)S[k]=saved[k];});}}catch(e){}
+var today=new Date().toDateString();if(S.doneDay!==today){S.done={};S.doneDay=today;}
+function save(){try{localStorage.setItem('kiblatku_jamaah',JSON.stringify({done:S.done,doneDay:S.doneDay,followed:S.followed,joined:S.joined,rounds:S.rounds,notif:S.notif,donCount:S.donCount}));}catch(e){}}
+
+var PR=[['subuh','Subuh','04:31'],['dzuhur','Dzuhur','11:46'],['ashar','Ashar','14:55'],['maghrib','Maghrib','17:51'],['isya','Isya','19:00']];
+function sec(h){var p=h.split(':');return p[0]*3600+p[1]*60;}
+function nowSec(){var d=new Date();return d.getHours()*3600+d.getMinutes()*60+d.getSeconds();}
+function nextIdx(){var n=nowSec(),i=PR.findIndex(function(p){return sec(p[2])>n;});return i<0?0:i;}
+function countdown(){var i=nextIdx(),t=sec(PR[i][2]),n=nowSec();if(t<=n)t+=86400;var d=t-n;return pad(Math.floor(d/3600))+':'+pad(Math.floor(d%3600/60))+':'+pad(d%60);}
+var M=[
+{id:'m1',num:1,name:'Masjid Al-Ikhlas',addr:'Jl. Contoh Raya No. 12, Pondok Aren',dist:'0,4 km',followers:1240,cap:'800',tb:'var(--mint)',tf:'var(--e7)'},
+{id:'m2',num:2,name:'Masjid Nurul Huda',addr:'Jl. Contoh Melati No. 3, Serpong',dist:'1,1 km',followers:860,cap:'600',tb:'var(--sky)',tf:'var(--skyD)'},
+{id:'m3',num:3,name:'Masjid At-Taqwa',addr:'Jl. Contoh Kenanga No. 8, Ciputat',dist:'2,3 km',followers:2105,cap:'1.500',tb:'var(--goldS)',tf:'var(--goldD)'},
+{id:'m4',num:4,name:'Masjid Baitul Rahman',addr:'Jl. Contoh Anggrek No. 21, Bintaro',dist:'3,0 km',followers:540,cap:'400',tb:'var(--vio)',tf:'var(--vioD)'}];
+function curM(){return M.filter(function(m){return m.id===S.masjid;})[0]||M[0];}
+var DZ=[['سُبْحَانَ ٱللَّٰهِ','Subhanallah','Maha Suci Allah'],['ٱلْحَمْدُ لِلَّٰهِ','Alhamdulillah','Segala puji bagi Allah'],['ٱللَّٰهُ أَكْبَرُ','Allahu Akbar','Allah Maha Besar']];
+var SU=[[1,'Al-Fatihah','الفاتحة',7,'Makkiyah'],[2,'Al-Baqarah','البقرة',286,'Madaniyah'],[3,"Ali 'Imran",'آل عمران',200,'Madaniyah'],[18,'Al-Kahf','الكهف',110,'Makkiyah'],[36,'Yasin','يس',83,'Makkiyah'],[55,'Ar-Rahman','الرحمن',78,'Madaniyah'],[67,'Al-Mulk','الملك',30,'Makkiyah']];
+var FA=['بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ','ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَٰلَمِينَ','ٱلرَّحْمَٰنِ ٱلرَّحِيمِ','مَٰلِكِ يَوْمِ ٱلدِّينِ','إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ','ٱهْدِنَا ٱلصِّرَٰطَ ٱلْمُسْتَقِيمَ','صِرَٰطَ ٱلَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ ٱلْمَغْضُوبِ عَلَيْهِمْ وَلَا ٱلضَّآلِّينَ'];
+var EV=[['e1',"Kajian Ba'da Maghrib: Fiqih Muamalah",'25','Sep','Jumat 18:10','Masjid Al-Ikhlas','var(--mint)','#0A5A42'],['e2','Tabligh Akbar Maulid Nabi','27','Sep','Minggu 08:00','Masjid Nurul Huda','var(--rose)','var(--roseD)'],['e3','Santunan Anak Yatim','03','Okt','Sabtu 09:00','Masjid At-Taqwa','var(--goldS)','var(--goldD)']];
+
+var T={jadwal:['Jadwal Salat','Tracker harian'],tasbih:['Tasbih Digital','Dzikir setelah salat'],kiblat:['Arah Kiblat','Tangerang Selatan'],zakat:['Kalkulator Zakat','Hitung dan tunaikan langsung'],masjid:['Masjid','Temukan masjid di sekitar Anda'],donasi:['Donasi','Aman, transparan, tercatat otomatis'],event:['Kegiatan','Kajian dan acara di sekitar Anda'],quran:["Al-Qur'an",'114 surah, 30 juz'],baca:["Al-Qur'an",'Mode baca'],akun:['Akun','Profil dan aktivitas']};
+var BACK={jadwal:'home',tasbih:'home',kiblat:'home',zakat:'home',event:'home',baca:'quran'};
+var TAB={home:'home',jadwal:'home',tasbih:'home',kiblat:'home',zakat:'home',event:'home',masjid:'masjid',detail:'masjid',donasi:'donasi',sukses:'donasi',quran:'quran',baca:'quran',akun:'akun'};
+
+function header(){var t=T[S.screen];if(!t)return '';var b=BACK[S.screen];return '<div class="hdr '+(b?'sm':'')+'">'+(b?'<button class="ib" aria-label="Kembali" data-go="'+b+'">'+ic('back',20,2.2)+'</button>':'')+'<div><h1>'+t[0]+'</h1><small>'+t[1]+'</small></div></div>';}
+function quick(go,bg,fg,icon,label,extra){return '<button data-go="'+go+'"><i style="background:'+bg+';color:'+fg+';'+(extra||'')+'">'+ic(icon,26,1.9)+'</i>'+label+'</button>';}
+function campaign(bg,deco,tag,tagc,title,where,pct,col,raised,goal,m,cat){return '<div class="card camp"><div class="top" style="background:'+bg+'">'+deco+'<span class="tag" style="color:'+tagc+'">'+tag+'</span></div><div style="padding:14px;display:flex;flex-direction:column;gap:8px"><b style="font-size:15px">'+title+'</b><small style="color:var(--mut)">'+where+'</small><div class="prog"><i style="width:'+pct+'%;background:'+col+'"></i></div><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><small style="color:#3A4A44"><b>'+raised+'</b> dari '+goal+'</small><button class="sbtn" data-act="camp" data-m="'+m+'" data-c="'+cat+'">Donasi</button></div></div></div>';}
+
+var V={
+home:function(){
+ var i=nextIdx(),d=new Date();
+ return '<div style="display:flex;flex-direction:column;gap:24px;padding-bottom:120px"><div>'+
+ '<div class="hero">'+PAT+'<div class="glow" style="top:-70px;right:-60px;width:240px;height:240px"></div><svg class="sky" viewBox="0 0 390 90" preserveAspectRatio="none" aria-hidden="true">'+SKY+'</svg>'+
+ '<div style="display:flex;flex-direction:column;gap:18px">'+
+ '<div class="row" style="gap:12px"><div class="ico" style="width:44px;height:44px;border-radius:14px;background:rgba(255,255,255,.1)"><svg class="logo-mk" width="30" height="30" viewBox="0 0 100 100" aria-hidden="true"><path fill="#FFFFFF" fill-rule="evenodd" d="M50 5C29.6 5 15 20.4 15 40.2 15 65 50 95 50 95s35-30 35-54.8C85 20.4 70.4 5 50 5zM37.5 61V43.5c0-9 5.6-15.6 12.5-21 6.9 5.4 12.5 12 12.5 21V61z"/><circle cx="50" cy="45" r="4.6" fill="#E3B04B"/></svg></div><div style="flex:1;display:flex;flex-direction:column"><small style="color:#CFE3DA">Assalamu\'alaikum</small><b style="font-size:18px">Ahmad</b></div><button class="ib" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.18);color:#fff;box-shadow:none;position:relative" aria-label="Notifikasi" data-act="bell">'+ic('bell',20)+'<span style="position:absolute;top:10px;right:11px;width:8px;height:8px;border-radius:50%;background:var(--gold)"></span></button></div>'+
+ '<div style="display:flex;gap:8px;flex-wrap:wrap"><span class="chip"><span style="color:#F1CF85">'+ic('pin',14,2.2)+'</span>Tangerang Selatan</span><span class="chip">'+d.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'short'})+'</span></div>'+
+ '<div style="display:flex;align-items:flex-end;justify-content:space-between"><div><small style="color:#CFE3DA;font-weight:600;font-size:13px">Menuju salat '+PR[i][1]+'</small><div class="big">'+PR[i][2]+'</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;padding-bottom:6px"><small style="font-size:11px;color:#CFE3DA;font-weight:600">Hitung mundur</small><span class="cd" data-cd>'+countdown()+'</span></div></div>'+
+ '</div></div>'+
+ '<div class="strip">'+PR.map(function(p,k){return '<button data-go="jadwal" class="'+(k===i?'on':'')+'"><span>'+p[1]+'</span><b>'+p[2]+'</b></button>';}).join('')+'</div></div>'+
+ '<div style="padding:0 16px;display:flex;flex-direction:column;gap:12px"><div class="sec-t">Layanan</div><div class="qgrid">'+
+ quick('jadwal','var(--mint)','var(--e7)','clock','Jadwal')+quick('kiblat','var(--sky)','var(--skyD)','compass','Kiblat')+quick('tasbih','var(--vio)','var(--vioD)','beads','Tasbih')+quick('quran','var(--teal)','var(--tealD)','book',"Al-Qur'an")+
+ quick('zakat','var(--goldS)','var(--goldD)','calc','Zakat')+quick('masjid','var(--mint)','var(--e7)','mosque','Masjid')+quick('event','var(--rose)','var(--roseD)','cal','Kegiatan')+quick('donasi','var(--gold)','#3D2803','heart','Donasi','box-shadow:0 8px 18px -8px rgba(227,176,75,.9)')+
+ '</div></div>'+
+ '<div style="display:flex;flex-direction:column;gap:12px"><div style="padding:0 16px;display:flex;justify-content:space-between;align-items:center"><span class="sec-t">Program kebaikan</span><button data-go="donasi" style="border:0;background:transparent;font-size:13px;font-weight:800;color:var(--e7);min-height:44px">Lihat semua</button></div><div class="hscroll">'+
+ campaign('#CFE8DD','<svg viewBox="0 0 390 90" width="300" height="70" style="position:absolute;left:-20px;bottom:0" aria-hidden="true"><path fill="#9FCDB9" d="'+SKY.match(/d="([^"]+)"/)[1]+'"/></svg>','Renovasi','var(--e8)','Renovasi tempat wudu','Masjid Al-Ikhlas, 0,4 km',68,'var(--e6)','Rp 34 jt','Rp 50 jt','m1','Infaq')+
+ campaign('#F6E3BA','<svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#E8C77F" stroke-width="1.2" style="position:absolute;right:-10px;top:-8px" aria-hidden="true">'+P.heart+'</svg>','Sosial','#6B4508','Santunan 100 anak yatim','Masjid At-Taqwa, 2,3 km',42,'#D98A1E','Rp 12,6 jt','Rp 30 jt','m3','Sedekah')+
+ campaign('#D6E6F7','<svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#A9C6E8" stroke-width="1.2" style="position:absolute;right:-8px;top:-6px" aria-hidden="true">'+P.book+'</svg>','Wakaf','var(--skyD)','Wakaf 500 mushaf','Masjid Nurul Huda, 1,1 km',81,'#3E7BC2','Rp 30,4 jt','Rp 37,5 jt','m2','Wakaf')+
+ '</div></div>'+
+ '<div style="padding:0 16px"><div style="position:relative;overflow:hidden;background:var(--mint);border-radius:22px;padding:20px;display:flex;flex-direction:column;gap:10px"><svg width="140" height="140" viewBox="0 0 48 48" style="position:absolute;right:-30px;top:-30px" aria-hidden="true"><path d="M24 4l6 14 14 6-14 6-6 14-6-14-14-6 14-6z" fill="none" stroke="#B8DCCB" stroke-width="1.5"/></svg><b style="position:relative;font-size:13px;color:var(--e7)">Ayat hari ini</b><span class="ar" style="position:relative;font-size:28px;color:var(--e8);text-align:right">إِنَّ مَعَ ٱلْعُسْرِ يُسْرًا</span><span style="position:relative;font-size:14px;line-height:1.5">"Sesungguhnya bersama kesulitan ada kemudahan."</span><small style="position:relative;font-weight:700;color:var(--mut)">QS. Al-Insyirah: 6</small></div></div>'+
+ '<div style="padding:0 16px;display:flex;flex-direction:column;gap:12px"><div class="sec-t">Kegiatan terdekat</div><button class="item" data-go="event"><span class="cal" style="background:var(--rose);color:var(--roseD)"><b>27</b><span>Sep</span></span><span class="t"><b>Tabligh Akbar Maulid Nabi</b><small>Minggu 08:00, Masjid Nurul Huda</small></span><span style="color:#7A8A84">'+ic('chev',20,2.2)+'</span></button></div>'+
+ '</div>';
+},
+jadwal:function(){
+ var i=nextIdx(),dc=PR.filter(function(p){return S.done[p[0]];}).length;
+ return '<div class="pad"><div class="dark" style="padding:20px;display:flex;align-items:center;gap:18px"><div style="position:relative;width:92px;height:92px;flex-shrink:0"><svg width="92" height="92" viewBox="0 0 92 92" style="transform:rotate(-90deg)"><circle cx="46" cy="46" r="38" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="10"/><circle cx="46" cy="46" r="38" fill="none" stroke="#E3B04B" stroke-width="10" stroke-linecap="round" stroke-dasharray="238.8" stroke-dashoffset="'+(238.8*(1-dc/5)).toFixed(1)+'" style="transition:stroke-dashoffset .3s"/></svg><div style="position:absolute;inset:0;display:grid;place-items:center;font-size:22px;font-weight:800">'+dc+'/5</div></div><div style="display:flex;flex-direction:column;gap:4px"><small style="color:#CFE3DA;font-weight:600">Tracker salat hari ini</small><b style="font-size:18px">'+(dc===5?'Alhamdulillah, lengkap!':(5-dc)+' salat lagi hari ini')+'</b><small style="color:#CFE3DA">Ketuk lingkaran untuk menandai</small></div></div>'+
+ PR.map(function(p,k){var d=!!S.done[p[0]],nx=k===i;return '<div class="card" style="display:flex;align-items:center;gap:14px;padding:12px 14px;'+(nx?'background:#FFF8E8;border-color:#F1D9A4':'')+'"><span class="ico" style="width:44px;height:44px;border-radius:14px;background:'+(nx?'var(--gold)':d?'var(--mint)':'#F1F4F2')+';color:'+(nx?'#3D2803':d?'var(--e7)':'#7A8A84')+'">'+ic('sun',22)+'</span><div style="flex:1;display:flex;flex-direction:column;gap:2px"><b style="font-size:16px">'+p[1]+'</b><small style="font-weight:600;color:'+(nx?'var(--goldD)':d?'var(--e7)':'var(--mut)')+'">'+(nx?'Berikutnya, <span data-cd>'+countdown()+'</span>':d?'Sudah dikerjakan':'Belum ditandai')+'</small></div><b style="font-size:18px;color:var(--e8);font-variant-numeric:tabular-nums">'+p[2]+'</b><button class="check '+(d?'on':'')+'" aria-pressed="'+d+'" aria-label="Tandai salat '+p[1]+'" data-act="pray" data-id="'+p[0]+'">'+(d?ic('check',20,3):'')+'</button></div>';}).join('')+
+ '<small style="color:var(--mut);text-align:center;padding:0 12px">Jadwal contoh untuk Tangerang Selatan. Versi produksi menghitung dari lokasi pengguna sesuai standar Kemenag.</small></div>';
+},
+tasbih:function(){
+ var dz=DZ[S.dz];
+ return '<div class="pad"><div class="dark" style="border-radius:28px;padding:26px 20px;display:flex;flex-direction:column;align-items:center;gap:16px">'+PAT+
+ '<div class="ar" style="font-size:42px;line-height:1.3">'+dz[0]+'</div><div style="font-size:14px;font-weight:700;color:#CFE3DA">'+dz[1]+', '+dz[2]+'</div>'+
+ '<button aria-label="Hitung dzikir" data-act="tap" style="position:relative;width:240px;height:240px;border-radius:50%;border:0;background:transparent;padding:0;color:#fff"><svg width="240" height="240" viewBox="0 0 240 240" style="position:absolute;inset:0;transform:rotate(-90deg)"><circle cx="120" cy="120" r="108" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="14"/><circle cx="120" cy="120" r="108" fill="none" stroke="#E3B04B" stroke-width="14" stroke-linecap="round" stroke-dasharray="678.6" stroke-dashoffset="'+(678.6*(1-S.count/33)).toFixed(1)+'"/></svg><span style="position:absolute;top:28px;left:28px;width:184px;height:184px;border-radius:50%;background:var(--e7);box-shadow:inset 0 -8px 20px rgba(0,0,0,.2),0 16px 30px -12px rgba(0,0,0,.45);display:flex;flex-direction:column;align-items:center;justify-content:center"><span style="font-size:66px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums">'+S.count+'</span><span style="font-size:13px;color:#CFE3DA;font-weight:600">dari 33, ketuk</span></span></button>'+
+ '<div style="display:flex;gap:6px">'+DZ.map(function(d,k){return '<span class="pill" style="font-size:12px;padding:7px 12px;background:'+(k===S.dz?'var(--gold)':'rgba(255,255,255,.1)')+';color:'+(k===S.dz?'#3D2803':'#CFE3DA')+'">'+d[1]+'</span>';}).join('')+'</div></div>'+
+ '<div style="display:flex;gap:12px"><div class="card" style="flex:1;padding:14px 16px;box-shadow:none"><small style="color:var(--mut);font-weight:600">Putaran selesai</small><div style="font-size:22px;font-weight:800;color:var(--e8)">'+S.rounds+'</div></div><button class="card" data-act="resetT" style="flex:1;font-size:14px;font-weight:800;color:var(--e7);box-shadow:none">Ulangi</button></div></div>';
+},
+kiblat:function(){
+ return '<div class="pad" style="align-items:center;gap:22px;padding-top:10px"><div style="position:relative;width:300px;height:300px;border-radius:50%;background:var(--e8);box-shadow:0 30px 50px -24px rgba(6,47,36,.6)"><div style="position:absolute;inset:18px;border-radius:50%;background:#fff"></div><svg width="300" height="300" viewBox="0 0 300 300" style="position:absolute;inset:0"><circle cx="150" cy="150" r="118" fill="none" stroke="#DCE6E1" stroke-width="10" stroke-dasharray="2 10.36"/></svg>'+
+ '<b style="position:absolute;top:34px;left:0;right:0;text-align:center;color:#B03A2E">U</b><b style="position:absolute;bottom:34px;left:0;right:0;text-align:center;color:var(--mut)">S</b><b style="position:absolute;top:140px;right:38px;color:var(--mut)">T</b><b style="position:absolute;top:140px;left:38px;color:var(--mut)">B</b>'+
+ '<div id="needle" style="position:absolute;left:146px;top:44px;width:8px;height:106px;background:var(--gold);border-radius:4px;transform-origin:50% 100%;transform:rotate(-65deg);transition:transform .3s"><div style="position:absolute;top:-24px;left:-10px;width:28px;height:28px;background:var(--ink);border-radius:5px;border-top:6px solid var(--gold)"></div></div><div style="position:absolute;left:138px;top:138px;width:24px;height:24px;border-radius:50%;background:var(--e8);border:4px solid var(--gold)"></div></div>'+
+ '<div style="text-align:center"><div style="font-size:32px;font-weight:800;color:var(--e8);letter-spacing:-1px">295°</div><div style="font-size:14px;color:var(--mut);font-weight:600">dari Utara, jarak ke Ka\'bah sekitar 7.900 km</div></div>'+
+ '<div style="display:flex;gap:12px;align-items:center;background:var(--sky);color:#174A7E;border-radius:18px;padding:14px 16px;font-size:13px;font-weight:600">'+ic('info',22)+'<span>Di ponsel yang punya sensor kompas, jarum mengikuti arah perangkat. Jauhkan dari benda logam.</span></div>'+
+ '<button class="btn line" data-act="compass">Aktifkan kompas</button></div>';
+},
+zakat:function(){
+ var inc=S.zType==='income',base=inc?S.zA+S.zB:Math.max(0,S.zA-S.zB),z=base*.025;
+ return '<div class="pad"><div class="seg"><button class="'+(inc?'on':'')+'" data-act="ztype" data-v="income">Penghasilan</button><button class="'+(!inc?'on':'')+'" data-act="ztype" data-v="maal">Maal (harta)</button></div>'+
+ '<div class="card" style="padding:18px;display:flex;flex-direction:column;gap:14px;box-shadow:none"><div style="display:flex;flex-direction:column;gap:7px"><label class="lbl" for="zA">'+(inc?'Penghasilan per bulan':'Tabungan, emas, dan investasi')+'</label><div class="money"><b>Rp</b><input id="zA" inputmode="numeric" data-in="zA" value="'+fmt(S.zA)+'" placeholder="0"></div></div><div style="display:flex;flex-direction:column;gap:7px"><label class="lbl" for="zB">'+(inc?'Pendapatan lain atau bonus':'Utang jatuh tempo (dikurangkan)')+'</label><div class="money"><b>Rp</b><input id="zB" inputmode="numeric" data-in="zB" value="'+fmt(S.zB)+'" placeholder="0"></div></div></div>'+
+ '<div class="dark" style="border-radius:22px;padding:20px;display:flex;flex-direction:column;gap:6px"><div class="glow" style="right:-40px;top:-40px;width:140px;height:140px"></div><small style="color:#CFE3DA;font-weight:600;font-size:13px">Zakat yang perlu dibayar (2,5%)</small><b style="font-size:32px;letter-spacing:-1px" data-z>'+rp(z)+'</b><small style="color:#CFE3DA" data-zb>Dasar perhitungan: '+rp(base)+'</small></div>'+
+ '<small style="color:var(--mut);line-height:1.5">'+(inc?'Zakat penghasilan wajib bila penghasilan mencapai nisab setara 85 gram emas per tahun. Nilai nisab mengikuti ketetapan BAZNAS terbaru.':'Zakat maal wajib bila harta mencapai nisab setara 85 gram emas dan sudah dimiliki selama satu tahun (haul).')+'</small>'+
+ '<button class="btn gold" data-act="payZakat">Tunaikan zakat sekarang</button></div>';
+},
+masjid:function(){
+ var q=S.q.trim().toLowerCase(),list=M.filter(function(m){return (!q||m.name.toLowerCase().indexOf(q)>=0)&&(S.mFilter==='all'||S.followed[m.id]);});
+ return '<div class="pad"><label class="money" style="background:#fff;border-color:var(--line);color:#7A8A84">'+ic('search',20)+'<span class="sr">Cari masjid</span><input data-in="q" id="mq" value="'+esc(S.q)+'" placeholder="Cari nama masjid…" style="font-size:15px;font-weight:500"></label>'+
+ '<div style="display:flex;gap:8px"><button class="fchip '+(S.mFilter==='all'?'on':'')+'" data-act="mf" data-v="all">Terdekat</button><button class="fchip '+(S.mFilter==='followed'?'on':'')+'" data-act="mf" data-v="followed">Diikuti</button></div>'+
+ '<div style="position:relative;height:150px;border-radius:22px;overflow:hidden;background:#E3EDE7;border:1px solid #D5E2DB"><svg width="100%" height="150" viewBox="0 0 358 150" preserveAspectRatio="none" style="position:absolute;inset:0"><rect x="20" y="16" width="80" height="50" rx="10" fill="#CFE3D6"/><rect x="250" y="90" width="90" height="46" rx="10" fill="#CFE3D6"/><path d="M0 88 C80 80 140 110 358 70" stroke="#fff" stroke-width="10" fill="none"/><path d="M150 0 L190 150" stroke="#fff" stroke-width="8"/><path d="M0 30 L358 40" stroke="#fff" stroke-width="5"/><path d="M280 0 L300 150" stroke="#fff" stroke-width="5"/><path d="M-10 140 C120 120 200 130 360 118" stroke="#BCD4E8" stroke-width="8" fill="none"/></svg>'+
+ '<div style="position:absolute;left:46%;top:70px;width:18px;height:18px;border-radius:50%;background:#3E7BC2;border:4px solid #fff;box-shadow:0 0 0 8px rgba(62,123,194,.2)"></div>'+
+ [[31,44,1],[60,22,2],[16,100,3],[84,52,4]].map(function(p){return '<button data-act="openM" data-id="m'+p[2]+'" aria-label="Masjid nomor '+p[2]+'" style="position:absolute;left:'+p[0]+'%;top:'+p[1]+'px;width:30px;height:30px;border:0;border-radius:10px 10px 10px 2px;background:var(--e7);color:var(--gold);font-size:12px;font-weight:800">'+p[2]+'</button>';}).join('')+
+ '<span class="tag" style="color:var(--e8)">Peta sekitar Anda</span></div>'+
+ (list.length?list.map(function(m){var f=!!S.followed[m.id];return '<button class="item" data-act="openM" data-id="'+m.id+'"><span style="position:relative;width:70px;height:70px;border-radius:18px;background:'+m.tb+';color:'+m.tf+'" class="ico">'+ic('mosque',34,1.7)+'<span style="position:absolute;top:-6px;left:-6px;width:24px;height:24px;border-radius:8px;background:var(--e7);color:var(--gold);font-size:11px;font-weight:800;display:grid;place-items:center;border:2px solid #fff">'+m.num+'</span></span><span class="t"><b>'+m.name+'</b><small>'+m.addr+'</small><span style="display:flex;gap:6px"><span class="pill" style="background:'+(f?'var(--goldS)':'var(--mint)')+';color:'+(f?'#7A4E05':'#0A5A42')+'">'+(f?'Diikuti':'Terverifikasi')+'</span><span class="pill" style="background:#F1F4F2;color:#3A4A44">'+m.dist+'</span></span></span></button>';}).join(''):'<div style="text-align:center;color:var(--mut);font-size:14px;padding:24px;background:#fff;border-radius:20px;border:1px dashed #CBD6D0">Belum ada masjid yang cocok. Coba kata kunci lain.</div>')+'</div>';
+},
+detail:function(){
+ var m=curM(),f=!!S.followed[m.id];
+ var kaj=[['var(--teal)','var(--tealD)',"Tafsir Juz 'Amma","Senin dan Kamis, ba'da Maghrib"],['var(--goldS)','var(--goldD)','Fiqih Muamalah',"Jumat, ba'da Maghrib"],['var(--vio)','var(--vioD)','Kajian Subuh Ahad',"Minggu, ba'da Subuh"]];
+ return '<div style="padding-bottom:120px"><div class="dark" style="height:250px;border-radius:0">'+PAT+'<div style="position:absolute;top:40px;right:-40px;width:220px;height:220px;border-radius:50%;background:var(--gold);opacity:.18"></div><svg viewBox="0 0 390 90" preserveAspectRatio="none" style="position:absolute;left:0;bottom:0;width:100%;height:120px" aria-hidden="true">'+SKY+'</svg>'+
+ '<button class="ib" aria-label="Kembali" data-go="masjid" style="position:absolute;top:calc(16px + env(safe-area-inset-top,0px));left:16px;border:0">'+ic('back',20,2.2)+'</button><button class="ib" aria-label="Bagikan" data-act="share" style="position:absolute;top:calc(16px + env(safe-area-inset-top,0px));right:16px;border:0">'+ic('share',20)+'</button></div>'+
+ '<div class="card" style="position:relative;margin:-46px 16px 0;padding:18px;display:flex;flex-direction:column;gap:14px;border-radius:24px"><div style="display:flex;flex-direction:column;gap:4px"><span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:800;color:#0A5A42">'+ic('shield',14,2.4)+'Terverifikasi SDMI</span><b style="font-size:22px;letter-spacing:-.5px">'+m.name+'</b><small style="color:var(--mut);font-size:13px">'+m.addr+'</small></div>'+
+ '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">'+[[(m.followers+(f&&m.id!=='m1'?1:0)).toLocaleString('id-ID'),'pengikut'],[m.cap,'kapasitas'],[m.dist,'jarak']].map(function(x){return '<div style="background:var(--bg);border-radius:14px;padding:10px;text-align:center"><b style="display:block;font-size:16px">'+x[0]+'</b><small style="font-size:11px;color:var(--mut);font-weight:600">'+x[1]+'</small></div>';}).join('')+'</div>'+
+ '<div style="display:flex;gap:10px"><button data-act="follow" aria-pressed="'+f+'" style="flex:1;min-height:48px;border:2px solid var(--e7);border-radius:14px;font-size:14px;font-weight:800;background:'+(f?'#fff':'var(--e7)')+';color:'+(f?'var(--e7)':'#fff')+'">'+(f?'Diikuti':'Ikuti masjid')+'</button><button data-act="dir" style="flex:1;min-height:48px;border:0;background:#F1F4F2;color:var(--e8);border-radius:14px;font-size:14px;font-weight:800">Petunjuk arah</button></div></div>'+
+ '<div style="padding:20px 16px 0;display:flex;flex-direction:column;gap:10px"><div class="sec-t">Jadwal kajian</div>'+kaj.map(function(k){return '<div class="card" style="padding:14px;display:flex;gap:12px;align-items:center;box-shadow:none;border-radius:18px"><span class="ico" style="width:42px;height:42px;border-radius:13px;background:'+k[0]+';color:'+k[1]+'">'+ic('book',20)+'</span><span style="display:flex;flex-direction:column;gap:2px"><b style="font-size:14px">'+k[2]+'</b><small style="color:var(--mut)">'+k[3]+'</small></span></div>';}).join('')+
+ '<button class="btn gold" style="margin-top:8px" data-go="donasi">Donasi ke masjid ini</button></div></div>';
+},
+donasi:function(){
+ var m=curM(),amount=S.custom>0?S.custom:S.amount;
+ var MT=[['qris','QRIS','QRIS','Scan dari aplikasi bank atau e-wallet','var(--mint)','var(--e7)'],['ewallet','E-W','E-Wallet','GoPay, OVO, DANA, ShopeePay','var(--sky)','var(--skyD)'],['va','VA','Virtual Account','BSI, BCA, Mandiri, BRI, BNI','var(--goldS)','var(--goldD)']];
+ return '<div class="pad" style="gap:20px"><div style="display:flex;flex-direction:column;gap:10px"><b style="font-size:14px">Masjid tujuan</b><div class="hscroll" style="padding:0 0 4px">'+M.map(function(x){return '<button class="mchip '+(x.id===S.masjid?'on':'')+'" data-act="pickM" data-id="'+x.id+'"><span class="ico" style="width:36px;height:36px;border-radius:11px;background:'+x.tb+';color:'+x.tf+'">'+ic('mosque',20,1.9)+'</span><b style="font-size:13px;line-height:1.3">'+x.name+'</b><small style="font-size:11px;color:var(--mut);font-weight:600">'+x.dist+'</small></button>';}).join('')+'</div></div>'+
+ '<div style="display:flex;flex-direction:column;gap:10px"><b style="font-size:14px">Jenis donasi</b><div class="seg">'+['Infaq','Sedekah','Zakat','Wakaf'].map(function(c){return '<button class="'+(S.cat===c?'on':'')+'" data-act="cat" data-v="'+c+'">'+c+'</button>';}).join('')+'</div></div>'+
+ '<div style="display:flex;flex-direction:column;gap:10px"><b style="font-size:14px">Nominal</b><div class="amts">'+[10000,25000,50000,100000,250000,500000].map(function(v){return '<button class="'+(!S.custom&&S.amount===v?'on':'')+'" data-act="amt" data-v="'+v+'">'+(v/1000)+' rb</button>';}).join('')+'</div><label class="money" style="background:#fff"><b>Rp</b><span class="sr">Nominal lain</span><input id="dc" inputmode="numeric" data-in="custom" value="'+fmt(S.custom)+'" placeholder="Nominal lain" style="font-size:16px"></label></div>'+
+ '<div style="display:flex;flex-direction:column;gap:10px"><b style="font-size:14px">Metode pembayaran</b>'+MT.map(function(x){return '<button class="opt '+(S.method===x[0]?'on':'')+'" data-act="method" data-v="'+x[0]+'"><span class="ico" style="width:44px;height:44px;border-radius:13px;background:'+x[4]+';color:'+x[5]+';font-size:11px;font-weight:800">'+x[1]+'</span><span style="flex:1;display:flex;flex-direction:column;gap:2px"><b style="font-size:14px">'+x[2]+'</b><small style="color:var(--mut)">'+x[3]+'</small></span><span class="radio"></span></button>';}).join('')+'</div>'+
+ '<div class="card" style="padding:16px;display:flex;flex-direction:column;gap:12px;box-shadow:none"><div class="kv"><span>'+S.cat+' untuk</span><b>'+m.name+'</b></div><div class="kv" style="align-items:center"><span>Total</span><b style="font-size:22px;color:var(--e8)" data-total>'+rp(amount)+'</b></div><button class="btn green" data-act="pay">Bayar sekarang</button></div></div>';
+},
+sukses:function(){
+ var m=curM(),amount=S.custom>0?S.custom:S.amount,mn={qris:'QRIS',ewallet:'E-Wallet',va:'Virtual Account'}[S.method];
+ return '<div class="pad" style="align-items:center;text-align:center;gap:16px;padding-top:calc(40px + env(safe-area-inset-top,0px))"><div style="position:relative;width:150px;height:150px;display:grid;place-items:center"><div style="position:absolute;inset:0;border-radius:50%;background:var(--mint)"></div><div style="position:absolute;inset:18px;border-radius:50%;background:#CFE8DD"></div><div style="position:absolute;top:10px;right:6px;width:14px;height:14px;border-radius:4px;background:var(--gold);transform:rotate(20deg)"></div><div style="position:absolute;bottom:16px;left:2px;width:10px;height:10px;border-radius:50%;background:#3E7BC2"></div><div style="position:absolute;top:30px;left:0;width:8px;height:8px;border-radius:2px;background:var(--roseD);transform:rotate(45deg)"></div><div style="position:relative;width:84px;height:84px;border-radius:50%;background:var(--e7);color:#fff;display:grid;place-items:center;box-shadow:0 14px 28px -10px rgba(15,90,69,.7)">'+ic('check',42,2.8)+'</div></div>'+
+ '<div style="font-size:26px;font-weight:800;color:var(--e8);letter-spacing:-.5px">Jazakallahu khairan</div><div style="font-size:14px;color:#3A4A44;line-height:1.5">Donasi Anda berhasil dan otomatis tercatat di laporan keuangan masjid.</div>'+
+ '<div class="card" style="width:100%;padding:18px;display:flex;flex-direction:column;gap:12px;text-align:left;box-shadow:none"><div class="kv" style="align-items:center;padding-bottom:12px;border-bottom:1px dashed #D5DED9"><span>Nominal</span><b style="font-size:22px;color:var(--e8)">'+rp(amount)+'</b></div><div class="kv"><span>Masjid</span><b>'+m.name+'</b></div><div class="kv"><span>Jenis</span><b>'+S.cat+'</b></div><div class="kv"><span>Metode</span><b>'+mn+'</b></div><div class="kv"><span>No. referensi</span><b>'+S.ref+'</b></div></div>'+
+ '<button class="btn green" data-go="home">Kembali ke beranda</button><button class="btn line" data-act="shareR">Bagikan bukti donasi</button></div>';
+},
+event:function(){
+ return '<div class="pad"><div class="dark" style="border-radius:22px;padding:18px;display:flex;align-items:center;gap:14px;background:'+(S.checkedIn?'var(--e6)':'var(--e8)')+'">'+PAT+'<span class="ico" style="width:52px;height:52px;border-radius:16px;background:var(--gold);color:var(--e8)">'+ic('qr',26)+'</span><div style="flex:1;display:flex;flex-direction:column;gap:2px"><b style="font-size:15px">'+(S.checkedIn?'Check-in berhasil':'Check-in kegiatan')+'</b><small style="color:#CFE3DA">'+(S.checkedIn?"Kajian Ba'da Maghrib, tercatat":'Pindai QR di lokasi acara')+'</small></div><button data-act="checkin" style="min-height:44px;padding:0 16px;border:0;background:#fff;color:var(--e8);border-radius:13px;font-size:13px;font-weight:800">'+(S.checkedIn?'Selesai':'Scan QR')+'</button></div>'+
+ EV.map(function(e){var j=!!S.joined[e[0]];return '<div class="card" style="padding:14px;display:flex;flex-direction:column;gap:12px;border-radius:22px"><div class="row"><span class="cal" style="background:'+e[6]+';color:'+e[7]+'"><b>'+e[2]+'</b><span>'+e[3]+'</span></span><span style="display:flex;flex-direction:column;gap:3px"><b style="font-size:15px">'+e[1]+'</b><small style="color:var(--mut)">'+e[4]+', '+e[5]+'</small></span></div><button data-act="join" data-id="'+e[0]+'" aria-pressed="'+j+'" style="min-height:46px;border-radius:14px;border:2px solid var(--e7);background:'+(j?'var(--e7)':'#fff')+';color:'+(j?'#fff':'var(--e7)')+';font-size:14px;font-weight:800">'+(j?'Terdaftar':'Daftar hadir')+'</button></div>';}).join('')+'</div>';
+},
+quran:function(){
+ return '<div class="pad" style="gap:12px"><button class="dark" data-act="openS" data-n="18" style="border:0;padding:20px;display:flex;flex-direction:column;gap:10px;text-align:left;color:#fff">'+PAT+'<small style="color:#CFE3DA;font-weight:700">Terakhir dibaca</small><span style="display:flex;justify-content:space-between;align-items:center;width:100%"><b style="font-size:20px">Al-Kahf, ayat 10</b><span class="ar" style="font-size:28px;color:#F1CF85">الكهف</span></span><span style="height:6px;width:100%;background:rgba(255,255,255,.15);border-radius:99px;overflow:hidden;display:block"><span style="display:block;width:9%;height:6px;background:var(--gold);border-radius:99px"></span></span></button>'+
+ SU.map(function(s){return '<button class="item" style="box-shadow:none;border-radius:18px;padding:12px 14px" data-act="openS" data-n="'+s[0]+'"><span class="star"><svg width="42" height="42" viewBox="0 0 42 42"><rect x="8" y="8" width="26" height="26" rx="4" fill="#E6F4EE" stroke="#9FCDB9" stroke-width="1.5"/><rect x="8" y="8" width="26" height="26" rx="4" fill="#E6F4EE" stroke="#9FCDB9" stroke-width="1.5" transform="rotate(45 21 21)"/></svg><span>'+s[0]+'</span></span><span class="t"><b>'+s[1]+'</b><small>'+s[4]+', '+s[3]+' ayat</small></span><span class="ar" style="font-size:24px;color:var(--e8)">'+s[2]+'</span></button>';}).join('')+'</div>';
+},
+baca:function(){
+ var s=SU.filter(function(x){return x[0]===S.surah;})[0]||SU[0];
+ return '<div class="pad" style="gap:12px"><div class="dark" style="padding:22px;display:flex;flex-direction:column;align-items:center;gap:4px">'+PAT+'<div class="ar" style="font-size:34px;color:#F1CF85">'+s[2]+'</div><b style="font-size:17px">'+s[1]+'</b><small style="color:#CFE3DA">'+s[4]+', '+s[3]+' ayat</small></div>'+
+ (s[0]===1?FA.map(function(v,k){return '<div class="card" style="padding:16px;display:flex;flex-direction:column;gap:8px;box-shadow:none;border-radius:18px"><span class="pill" style="align-self:flex-start;background:var(--mint);color:var(--e7);padding:4px 10px">Ayat '+(k+1)+'</span><span class="ar" style="font-size:26px;line-height:2;text-align:right">'+v+'</span></div>';}).join(''):'<div style="background:#fff;border:1px dashed #CBD6D0;border-radius:18px;padding:20px;font-size:14px;color:#3A4A44;text-align:center;line-height:1.5">Di versi demo ini hanya Al-Fatihah yang ditampilkan. Versi produksi memuat 114 surah lengkap dengan terjemahan dan audio murattal.</div>')+'</div>';
+},
+akun:function(){
+ var dc=PR.filter(function(p){return S.done[p[0]];}).length,fc=Object.keys(S.followed).filter(function(k){return S.followed[k];}).length,jc=Object.keys(S.joined).filter(function(k){return S.joined[k];}).length;
+ function st(bg,fg,icon,v,l){return '<div class="card" style="padding:16px;display:flex;flex-direction:column;gap:8px;box-shadow:none"><span class="ico" style="width:36px;height:36px;border-radius:11px;background:'+bg+';color:'+fg+'">'+ic(icon,18)+'</span><b style="font-size:24px;color:var(--e8)">'+v+'</b><small style="color:var(--mut);font-weight:600">'+l+'</small></div>';}
+ return '<div class="pad" style="gap:16px"><div class="dark" style="padding:20px;display:flex;gap:14px;align-items:center"><div class="glow" style="right:-40px;top:-50px;width:160px;height:160px"></div><div class="ico" style="width:62px;height:62px;border-radius:20px;background:var(--gold);color:var(--e8);font-size:24px;font-weight:800">A</div><div style="display:flex;flex-direction:column;gap:3px"><b style="font-size:19px">Ahmad</b><small style="color:#CFE3DA">'+fc+' masjid diikuti</small></div></div>'+
+ '<div class="sec-t">Aktivitas saya</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">'+st('var(--mint)','var(--e7)','clock',dc+'/5','salat hari ini')+st('var(--goldS)','var(--goldD)','heart',S.donCount,'donasi tercatat')+st('var(--rose)','var(--roseD)','cal',jc,'kegiatan didaftar')+st('var(--vio)','var(--vioD)','beads',S.rounds,'putaran tasbih')+'</div>'+
+ '<div class="card" style="overflow:hidden;box-shadow:none;border-radius:22px">'+[['hist','Riwayat donasi'],['hijri','Kalender Hijriah']].map(function(x){return '<button data-act="'+x[0]+'" style="display:flex;align-items:center;gap:12px;padding:16px;min-height:56px;border:0;border-bottom:1px solid #F0F3F1;background:transparent;font-size:14px;font-weight:700;width:100%;text-align:left"><span style="flex:1">'+x[1]+'</span><span style="color:#7A8A84">'+ic('chev',18,2.2)+'</span></button>';}).join('')+
+ '<div style="display:flex;align-items:center;gap:12px;padding:12px 16px"><span style="flex:1;font-size:14px;font-weight:700">Notifikasi azan dan kegiatan</span><button class="toggle" aria-label="Notifikasi azan dan kegiatan" aria-pressed="'+S.notif+'" data-act="notif"></button></div></div>'+
+ '<a href="index.html" style="text-align:center;font-size:14px;font-weight:700;color:var(--e7);text-decoration:none;padding:8px">Tentang Kiblatku</a></div>';
+}
+};
+
+var scroll=document.getElementById('scroll'),tabbar=document.getElementById('tabbar'),lastScreen='',lastIdx=nextIdx();
+function renderTabs(){var at=TAB[S.screen];function t(id,icon,l){return '<button data-go="'+id+'" class="'+(at===id?'on':'')+'" '+(at===id?'aria-current="page"':'')+'>'+ic(icon,22)+l+'<i></i></button>';}
+ tabbar.innerHTML=t('home','home','Beranda')+t('masjid','mosque','Masjid')+'<button class="fab" data-go="donasi" aria-label="Donasi"><svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true">'+P.heart+'</svg></button>'+t('quran','book',"Al-Qur'an")+t('akun','user','Akun');}
+function render(){
+ var ae=document.activeElement,fid=ae&&ae.id&&scroll.contains(ae)?ae.id:null,top=scroll.scrollTop;
+ scroll.innerHTML=header()+V[S.screen]();
+ renderTabs();
+ if(S.screen===lastScreen)scroll.scrollTop=top;else scroll.scrollTop=0;
+ lastScreen=S.screen;
+ if(fid){var el=document.getElementById(fid);if(el){el.focus();var L=el.value.length;try{el.setSelectionRange(L,L);}catch(e){}}}
+}
+function go(s){S.screen=s;history.replaceState(null,'','#'+s);render();}
+var toastEl=document.getElementById('toast'),tt;
+function toast(s){document.getElementById('toastT').textContent=s;toastEl.classList.add('show');clearTimeout(tt);tt=setTimeout(function(){toastEl.classList.remove('show');},2400);}
+
+setInterval(function(){
+ var i=nextIdx();if(i!==lastIdx){lastIdx=i;if(S.screen==='home'||S.screen==='jadwal')render();return;}
+ var c=countdown();document.querySelectorAll('[data-cd]').forEach(function(el){el.textContent=c;});
+},1000);
+
+var A={
+ bell:function(){toast("Pengingat: Kajian Ba'da Maghrib hari ini pukul 18:10");},
+ camp:function(b){S.masjid=b.dataset.m;S.cat=b.dataset.c;S.amount=100000;S.custom=0;go('donasi');},
+ pray:function(b){var id=b.dataset.id;S.done[id]=!S.done[id];save();render();},
+ tap:function(){if(navigator.vibrate)navigator.vibrate(12);if(S.count>=33){var last=S.dz===2;S.count=1;S.dz=last?0:S.dz+1;if(last){S.rounds++;save();toast('Satu putaran dzikir selesai. Masya Allah!');}}else S.count++;render();},
+ resetT:function(){S.count=0;S.dz=0;render();},
+ compass:function(){
+  function on(){window.addEventListener('deviceorientation',function(e){var h=e.webkitCompassHeading!=null?e.webkitCompassHeading:(e.alpha!=null?360-e.alpha:null);if(h==null)return;var n=document.getElementById('needle');if(n)n.style.transform='rotate('+(295-h)+'deg)';});toast('Kompas aktif. Putar ponsel sampai jarum menunjuk ke atas.');}
+  if(typeof DeviceOrientationEvent!=='undefined'&&typeof DeviceOrientationEvent.requestPermission==='function'){DeviceOrientationEvent.requestPermission().then(function(r){if(r==='granted')on();else toast('Izin sensor kompas ditolak');}).catch(function(){toast('Sensor kompas tidak tersedia');});}
+  else if('ondeviceorientation' in window){on();}else toast('Perangkat ini tidak punya sensor kompas');
+ },
+ ztype:function(b){S.zType=b.dataset.v;S.zA=0;S.zB=0;render();},
+ payZakat:function(){var inc=S.zType==='income',base=inc?S.zA+S.zB:Math.max(0,S.zA-S.zB),z=Math.round(base*.025);if(z<1000){toast('Isi nominal terlebih dahulu');return;}S.cat='Zakat';S.custom=z;go('donasi');},
+ mf:function(b){S.mFilter=b.dataset.v;render();},
+ openM:function(b){S.masjid=b.dataset.id;go('detail');},
+ follow:function(){var m=curM(),f=!S.followed[m.id];S.followed[m.id]=f;save();render();toast(f?'Anda akan menerima kabar dari '+m.name:'Berhenti mengikuti '+m.name);},
+ dir:function(){var m=curM();window.open('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(m.name+' Tangerang Selatan'),'_blank','noopener');},
+ share:function(){var m=curM(),u=location.href.split('#')[0];if(navigator.share)navigator.share({title:m.name,text:m.name+' di Kiblatku',url:u}).catch(function(){});else if(navigator.clipboard)navigator.clipboard.writeText(u).then(function(){toast('Link disalin');});},
+ pickM:function(b){S.masjid=b.dataset.id;render();},
+ cat:function(b){S.cat=b.dataset.v;render();},
+ amt:function(b){S.amount=+b.dataset.v;S.custom=0;render();},
+ method:function(b){S.method=b.dataset.v;render();},
+ pay:function(){var a=S.custom>0?S.custom:S.amount;if(a<10000){toast('Minimal donasi Rp 10.000');return;}var d=new Date();S.ref='ISL-'+String(d.getFullYear()).slice(2)+pad(d.getMonth()+1)+pad(d.getDate())+'-'+String(Math.floor(1000+Math.random()*9000));S.donCount++;save();go('sukses');},
+ shareR:function(){var a=S.custom>0?S.custom:S.amount,t='Alhamdulillah, saya berdonasi '+rp(a)+' ('+S.cat+') untuk '+curM().name+' lewat Kiblatku.';window.open('https://wa.me/?text='+encodeURIComponent(t),'_blank','noopener');},
+ checkin:function(){if(!S.checkedIn){S.checkedIn=true;render();toast('Kehadiran tercatat di Masjid Al-Ikhlas');}},
+ join:function(b){var id=b.dataset.id,j=!S.joined[id];S.joined[id]=j;save();render();toast(j?'Terdaftar. Pengingat dikirim 1 jam sebelum acara.':'Pendaftaran dibatalkan');},
+ openS:function(b){S.surah=+b.dataset.n;go('baca');},
+ hist:function(){toast('Riwayat donasi lengkap tersedia di versi produksi');},
+ hijri:function(){toast('Kalender Hijriah hadir di versi produksi');},
+ notif:function(){S.notif=!S.notif;save();render();}
+};
+document.getElementById('screen').addEventListener('click',function(e){
+ var g=e.target.closest('[data-go]');if(g){go(g.dataset.go);return;}
+ var a=e.target.closest('[data-act]');if(a&&A[a.dataset.act])A[a.dataset.act](a);
+});
+scroll.addEventListener('input',function(e){
+ var k=e.target.dataset.in;if(!k)return;
+ if(k==='q'){S.q=e.target.value;render();return;}
+ var v=digits(e.target.value);S[k]=v;e.target.value=fmt(v);
+ if(k==='custom'){render();return;}
+ var inc=S.zType==='income',base=inc?S.zA+S.zB:Math.max(0,S.zA-S.zB);
+ var z=scroll.querySelector('[data-z]'),zb=scroll.querySelector('[data-zb]');if(z)z.textContent=rp(base*.025);if(zb)zb.textContent='Dasar perhitungan: '+rp(base);
+});
+window.addEventListener('hashchange',function(){var s=location.hash.slice(1);if(V[s]&&s!==S.screen&&s!=='sukses'){S.screen=s;render();}});
+var h=location.hash.slice(1);if(V[h]&&h!=='sukses'&&h!=='detail')S.screen=h;
+
+var dev=document.querySelector('.device'),mq=window.matchMedia('(max-width:600px),(max-height:700px) and (max-width:900px)');
+function fit(){if(mq.matches){dev.style.transform='';dev.style.margin='';return;}var k=Math.min(1,(window.innerHeight-40)/868);dev.style.transformOrigin='center center';dev.style.transform=k<1?'scale('+k+')':'';dev.style.margin=k<1?(-(868*(1-k))/2)+'px '+(-(414*(1-k))/2)+'px':'';}
+window.addEventListener('resize',fit);fit();
+var sp=document.getElementById('splash');var seen=false;try{seen=sessionStorage.getItem('kiblatku_splash');sessionStorage.setItem('kiblatku_splash','1');}catch(e){}
+if(seen){sp.remove();}else{setTimeout(function(){sp.classList.add('hide');setTimeout(function(){sp.remove();},500);},1300);}
+render();
+})();
+</script>
+</body>
+</html>
