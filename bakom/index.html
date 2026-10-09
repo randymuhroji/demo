@@ -4142,7 +4142,7 @@
          dan kunci ini tidak diperlukan.
       
          Tiga cara mengisi kunci (pilih salah satu):
-           1) Tempel langsung di bawah  ->  const API_KEY="sk-ant-...";
+           1) Tempel langsung di bawah  ->  const x_xx="sk-ant-...";
            2) Lewat URL sekali          ->  buka ...index.html?aikey=sk-ant-...
               (otomatis tersimpan di browser via localStorage lalu URL bisa dibersihkan)
            3) Lewat konsol browser      ->  setBakomAIKey("sk-ant-...")   /   clearBakomAIKey()
@@ -4151,11 +4151,11 @@
          Untuk demo: pakai kunci sekali-pakai, pasang spend limit di Console Anthropic,
          cabut setelah demo, jangan commit kunci ke repo publik. Produksi: pakai backend proxy.
          ======================================================================= */
-      const API_KEY = "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";            // <-- ISI MANUAL di sini bila mau hard-code, mis. "sk-ant-..."
+      const x_xx = "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";            // <-- ISI MANUAL di sini bila mau hard-code, mis. "sk-ant-..."
       const API_MODEL = "claude-sonnet-4-6";  // ganti ke model yang aktif di akun Anda bila perlu
       const API_MAX_TOKENS = 2048;
       function resolveApiKey() {
-        let k = API_KEY || "";
+        let k = x_xx || "";
         try { const u = new URLSearchParams(location.search).get("aikey"); if (u) { localStorage.setItem("bakom-aikey", u.trim()); } } catch (e) { }
         try { if (!k) k = localStorage.getItem("bakom-aikey") || ""; } catch (e) { }
         return (k || "").trim();
