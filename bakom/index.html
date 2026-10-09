@@ -1282,12 +1282,54 @@
       }
     }
 
+    .rise {
+      animation: riseIn .5s cubic-bezier(.22, 1, .36, 1) backwards
+    }
+
+    @keyframes riseIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px)
+      }
+
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    .charten {
+      animation: fadeScale .6s ease-out backwards
+    }
+
+    @keyframes fadeScale {
+      from {
+        opacity: .15;
+        transform: scale(.985)
+      }
+
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    .growbar {
+      transition: width .9s cubic-bezier(.22, .61, .36, 1) !important
+    }
+
     @media (prefers-reduced-motion:reduce) {
 
       .view.enter,
       .pulse>div,
-      .tile.intro {
+      .tile.intro,
+      .rise,
+      .charten {
         animation: none !important
+      }
+
+      .growbar {
+        transition: none !important
       }
 
       #mapZoom,
@@ -3918,7 +3960,7 @@
   <script>
     (function () {
       "use strict";
-      let seed = 20261005;
+      let seed = 20261010;
       function rnd() { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }
       const pick = a => a[Math.floor(Math.random() * a.length)];
       const $ = s => document.querySelector(s);
@@ -3981,48 +4023,51 @@
       const PNAME = Object.fromEntries(PROV.map(p => [p[0], p[1]]));
       const DEFAULT_ISSUES = [
         {
-          id: "i1", judul: "Kenaikan harga beras di pasar tradisional", kat: "Ekonomi", s: [62, 28, 10], vol: 48210, vel: 34, reg: ["JABAR", "JATENG", "JATIM", "DKI", "BTN"], ch: { sosmed: 58, media: 22, gov: 20 }, kl: "Kemendag, Bapanas, Perum Bulog", hoax: false,
-          posts: ["Harga beras medium di pasar sini sudah tembus 16 ribu, warung makan mulai naikin harga", "Operasi pasar katanya ada, tapi di kecamatan kami belum kelihatan", "Mohon info resmi stok beras Bulog aman sampai kapan?", "Pedagang bilang pasokan dari penggilingan seret sejak dua minggu"]
+          id: "i1", judul: "Kenaikan harga beras & cabai jelang akhir tahun", kat: "Ekonomi", s: [61, 29, 10], vol: 51240, vel: 36, reg: ["JABAR", "JATENG", "JATIM", "DKI", "BTN"], ch: { sosmed: 58, media: 22, gov: 20 }, kl: "Kemendag, Bapanas, Perum Bulog", hoax: false,
+          posts: ["Harga beras medium naik lagi minggu ini, warung makan mulai sesuaikan porsi", "Cabai rawit tembus 70 ribu/kg gara-gara hujan di sentra produksi", "Operasi pasar katanya ada, tapi di kecamatan kami belum kelihatan", "Mohon info resmi: stok beras Bulog aman sampai Nataru tidak?"]
         },
         {
-          id: "i2", judul: "Keluhan distribusi Makan Bergizi Gratis di sekolah", kat: "Sosial", s: [48, 34, 18], vol: 31540, vel: 21, reg: ["NTT", "PAPUA", "PAPEG", "SULSEL", "MALUKU"], ch: { sosmed: 44, media: 26, gov: 30 }, kl: "Badan Gizi Nasional, Kemendikdasmen, pemda", hoax: false,
-          posts: ["Anak saya cerita makanan sampai sekolah sudah dingin dan telat dua jam", "Di sekolah kami program berjalan baik, anak-anak semangat masuk pagi", "Lapor: dapur penyedia di desa kami belum dapat kejelasan pembayaran", "Ada jalur pengaduan resmi kalau menu tidak sesuai standar?"]
+          id: "i2", judul: "Perluasan Makan Bergizi Gratis memasuki tahun kedua", kat: "Sosial", s: [46, 35, 19], vol: 34870, vel: 23, reg: ["NTT", "PAPUA", "PAPEG", "SULSEL", "MALUKU"], ch: { sosmed: 45, media: 25, gov: 30 }, kl: "Badan Gizi Nasional, Kemendikdasmen, pemda", hoax: false,
+          posts: ["Sekarang dapur MBG di kecamatan kami sudah jalan, anak-anak senang", "Kadang menu telat sampai, mohon jadwal pengiriman diperbaiki", "Lapor: dapur penyedia di desa kami belum dapat kejelasan pembayaran", "Ada jalur pengaduan resmi kalau mutu menu tidak sesuai standar?"]
         },
         {
-          id: "i3", judul: "Pesan berantai pencairan bansos lewat tautan", kat: "Dugaan hoaks", s: [55, 38, 7], vol: 27880, vel: 58, reg: ["JATIM", "JABAR", "SUMUT", "SULSEL", "LPG"], ch: { sosmed: 81, media: 6, gov: 13 }, kl: "Kemensos, Komdigi", hoax: true,
-          posts: ["Bansos Rp2,4 juta cair hari ini, klik link dan isi data KTP + nomor rekening", "Ini beneran nggak sih link bansos yang beredar di grup keluarga?", "Tetangga saya sudah isi data dari link itu, sekarang WA-nya diambil alih", "Jangan klik! Kemensos tidak pernah minta data lewat tautan"]
+          id: "i3", judul: "Pesan berantai pencairan bansos akhir tahun lewat tautan", kat: "Dugaan hoaks", s: [56, 37, 7], vol: 29950, vel: 61, reg: ["JATIM", "JABAR", "SUMUT", "SULSEL", "LPG"], ch: { sosmed: 82, media: 6, gov: 12 }, kl: "Kemensos, Komdigi", hoax: true,
+          posts: ["Bansos akhir tahun Rp2,4 juta cair hari ini, klik link & isi NIK + nomor rekening", "Ini beneran nggak sih link bansos yang beredar di grup keluarga?", "Tetangga saya sudah isi data dari link itu, sekarang WA-nya diambil alih", "Jangan klik! Kemensos tidak pernah minta data lewat tautan"]
         },
         {
-          id: "i4", judul: "Banjir rob di pesisir utara Jawa", kat: "Bencana", s: [51, 40, 9], vol: 22460, vel: 17, reg: ["JATENG", "DKI", "BTN", "JABAR"], ch: { sosmed: 49, media: 33, gov: 18 }, kl: "BNPB, Kementerian PU, BMKG, pemda", hoax: false,
-          posts: ["Air rob masuk rumah lagi sejak subuh, sudah tiga hari belum surut", "Posko pengungsian butuh selimut dan air bersih", "Kapan tanggul laut di wilayah kami dikerjakan?", "Info BMKG: pasang maksimum diperkirakan sampai akhir pekan"]
+          id: "i4", judul: "Banjir & longsor awal musim hujan", kat: "Bencana", s: [53, 39, 8], vol: 28640, vel: 44, reg: ["JATENG", "JABAR", "SUMBAR", "KALSEL", "SULSEL"], ch: { sosmed: 52, media: 32, gov: 16 }, kl: "BNPB, Kementerian PU, BMKG, pemda", hoax: false,
+          posts: ["Hujan deras sejak dini hari, beberapa titik sudah tergenang sampai lutut", "Longsor tutup jalan penghubung desa, warga minta alat berat", "Posko pengungsian butuh selimut, popok, dan air bersih", "Info BMKG: waspada hujan lebat & angin kencang beberapa hari ke depan"]
         },
         {
-          id: "i5", judul: "Video gempa lama diklaim terjadi hari ini", kat: "Dugaan hoaks", s: [44, 50, 6], vol: 19320, vel: 72, reg: ["SULTENG", "SULBAR", "GTO", "SULUT"], ch: { sosmed: 88, media: 5, gov: 7 }, kl: "BMKG, BNPB, Komdigi", hoax: true,
+          id: "i5", judul: "Video bencana lama diklaim kejadian hari ini", kat: "Dugaan hoaks", s: [45, 49, 6], vol: 21180, vel: 74, reg: ["SULTENG", "SULBAR", "GTO", "SULUT"], ch: { sosmed: 88, media: 5, gov: 7 }, kl: "BMKG, BNPB, Komdigi", hoax: true,
           posts: ["Gempa besar guncang Palu pagi ini, lihat videonya warga berhamburan!", "Ini video 2018, kenapa disebar lagi seolah baru terjadi?", "Keluarga di Donggala panik, minta konfirmasi BMKG", "Cek aplikasi BMKG, tidak ada gempa signifikan hari ini di Sulteng"]
         },
         {
-          id: "i6", judul: "Kualitas udara Jabodetabek memburuk", kat: "Lingkungan", s: [57, 33, 10], vol: 16890, vel: 9, reg: ["DKI", "BTN", "JABAR"], ch: { sosmed: 52, media: 31, gov: 17 }, kl: "Kementerian LH, Kemenkes, Pemprov DKI", hoax: false,
-          posts: ["Indeks udara pagi ini merah lagi, anak-anak batuk terus", "Apa kebijakan WFH bakal diberlakukan lagi untuk ASN?", "Sekolah sebaiknya kurangi kegiatan luar ruang", "Uji emisi kendaraan perlu diperketat"]
+          id: "i6", judul: "Lonjakan kasus DBD di awal musim hujan", kat: "Kesehatan", s: [54, 35, 11], vol: 18420, vel: 28, reg: ["JABAR", "JATENG", "JATIM", "BTN", "DKI"], ch: { sosmed: 50, media: 32, gov: 18 }, kl: "Kemenkes, Dinkes, pemda", hoax: false,
+          posts: ["Kasus DBD di RT kami naik, dua anak dirawat minggu ini", "Fogging kapan dilakukan? Nyamuk makin banyak sejak hujan", "Puskesmas imbau 3M Plus dan pantau demam tinggi", "Stok trombosit di PMI mulai menipis, mohon donor"]
         },
         {
-          id: "i7", judul: "Antusiasme pendaftaran CPNS 2026", kat: "Layanan publik", s: [18, 37, 45], vol: 14720, vel: 12, reg: ["JATIM", "JATENG", "SUMUT", "SULSEL", "DKI"], ch: { sosmed: 61, media: 19, gov: 20 }, kl: "KemenPAN-RB, BKN", hoax: false,
-          posts: ["Alhamdulillah akun SSCASN lancar diakses malam ini", "Formasi di daerah saya banyak, semoga transparan", "Situs sempat lambat sore tadi, sekarang normal", "Hati-hati penipuan joki CPNS, seleksi resmi gratis"]
+          id: "i7", judul: "Pengumuman hasil seleksi CASN/PPPK 2026", kat: "Layanan publik", s: [22, 36, 42], vol: 15980, vel: 14, reg: ["JATIM", "JATENG", "SUMUT", "SULSEL", "DKI"], ch: { sosmed: 60, media: 20, gov: 20 }, kl: "KemenPAN-RB, BKN", hoax: false,
+          posts: ["Alhamdulillah hasil seleksi sudah keluar, akun SSCASN lancar diakses", "Mohon kejelasan jadwal pemberkasan untuk yang lolos", "Ada kendala sanggah di portal, sudah normal lagi sekarang", "Hati-hati penipuan joki CASN, seleksi resmi gratis"]
         },
         {
-          id: "i8", judul: "Antrean BBM bersubsidi di SPBU", kat: "Energi", s: [59, 31, 10], vol: 12950, vel: 26, reg: ["KALTIM", "KALSEL", "RIAU", "KALTENG", "KALUT"], ch: { sosmed: 47, media: 28, gov: 25 }, kl: "Kementerian ESDM, BPH Migas, Pertamina", hoax: false,
+          id: "i8", judul: "Antrean BBM bersubsidi di SPBU", kat: "Energi", s: [58, 31, 11], vol: 13510, vel: 24, reg: ["KALTIM", "KALSEL", "RIAU", "KALTENG", "KALUT"], ch: { sosmed: 47, media: 28, gov: 25 }, kl: "Kementerian ESDM, BPH Migas, Pertamina", hoax: false,
           posts: ["Antre solar sampai 3 jam, sopir truk logistik terlambat", "Kuota harian SPBU di kota kami habis sebelum siang", "Mohon penjelasan apakah ada pembatasan pembelian baru?", "Pengecer eceran jual Pertalite di atas harga resmi"]
         }
       ];
       const CHANNELS = [{ k: "x", n: "X", g: "sosmed" }, { k: "tt", n: "TikTok", g: "sosmed" }, { k: "ig", n: "Instagram", g: "sosmed" }, { k: "fb", n: "Facebook", g: "sosmed" }, { k: "yt", n: "YouTube", g: "sosmed" }, { k: "news", n: "Media daring", g: "media" }, { k: "lapor", n: "SP4N-LAPOR!", g: "gov" }, { k: "kl", n: "Kanal K/L", g: "gov" }, { k: "cc", n: "Call center", g: "gov" }];
       const OFFICIAL_CH = ["Akun resmi K/L terkait", "@KomdigiRI", "Kanal pemda provinsi", "Siaran pers Bakom", "InfoPublik / portal pemerintah", "Narasi humas pemda kab/kota"];
       const DEFAULT_QUEUE = [
-        { id: "q1", teks: "Bansos Rp2,4 juta cair lewat tautan bit.ly/bansos-2026. Isi NIK, nomor rekening, dan kode OTP sebelum jam 23.59 hari ini.", asal: "Grup WhatsApp keluarga, 1.240 penerusan", isu: "i3", waktu: "07.42" },
-        { id: "q2", teks: "GEMPA M7,1 GUNCANG PALU PAGI INI! Warga diminta segera mengungsi. (disertai video warga berlarian)", asal: "TikTok, 1,2 jt tayangan", isu: "i5", waktu: "08.05" },
-        { id: "q3", teks: "Pemerintah menetapkan harga eceran tertinggi beras medium yang baru, berlaku mulai bulan depan.", asal: "Portal berita daring", isu: "i1", waktu: "08.18" },
-        { id: "q4", teks: "Air PAM di Jakarta Utara tercemar limbah, warga dilarang minum air keran selama seminggu.", asal: "X, 8.300 repost", isu: "i6", waktu: "08.31" }
+        { id: "q1", teks: "Bansos akhir tahun Rp2,4 juta cair lewat tautan bit.ly/blt-nataru. Isi NIK, nomor rekening, dan kode OTP sebelum jam 23.59 hari ini.", asal: "Grup WhatsApp keluarga, 1.480 penerusan", isu: "i3", waktu: "06.51" },
+        { id: "q2", teks: "GEMPA M7,1 GUNCANG PALU PAGI INI! Warga diminta segera mengungsi. (disertai video warga berlarian)", asal: "TikTok, 1,4 jt tayangan", isu: "i5", waktu: "07.20" },
+        { id: "q3", teks: "Pemerintah menetapkan harga eceran tertinggi beras medium yang baru, berlaku mulai bulan depan.", asal: "Portal berita daring", isu: "i1", waktu: "07.46" },
+        { id: "q4", teks: "Beredar pesan: rebusan daun pepaya + madu terbukti menyembuhkan DBD dalam 1 hari, tidak perlu ke rumah sakit.", asal: "WhatsApp & Facebook, 5.600 bagikan", isu: "i6", waktu: "08.04" }
       ];
       const HANDLES = ["w***n_88", "r***ka", "b***.id", "s***i_ptr", "a***dfr", "m***aja", "p***rakyat", "d***99", "n***sari", "k***ang", "y***pratama", "t***ia"];
 
+      /* versi konten demo — jika berubah, data simulasi lama dibersihkan agar konten terbaru muncul (sesi login & tema tetap) */
+      const DATA_VER = "2026-10-10";
+      try { if (localStorage.getItem("bakom-data-ver") !== DATA_VER) { [K.issues, K.queue, K.camps, K.appr, K.briefs, K.crises, K.dirs, K.evt, K.notif, K.progs, K.audit, "bakom-demo-seeded"].forEach(k => localStorage.removeItem(k)); localStorage.setItem("bakom-data-ver", DATA_VER); } } catch (e) { }
       let ISSUES = store.get(K.issues, null) || JSON.parse(JSON.stringify(DEFAULT_ISSUES));
       let QUEUE = store.get(K.queue, null) || JSON.parse(JSON.stringify(DEFAULT_QUEUE));
       let CAMPS = store.get(K.camps, []);
@@ -4039,7 +4084,7 @@
       function saveCrises() { store.set(K.crises, CRISES); }
       function saveDirs() { store.set(K.dirs, DIRS); }
       const DEFAULT_PROGS = [
-        { id: "pp1", nama: "Makan Bergizi Gratis", kl: "Badan Gizi Nasional, Kemendikdasmen", status: "perhatian", narasi: "Program pemenuhan gizi anak sekolah dan ibu hamil untuk menyiapkan generasi unggul.", pesan: ["Program berjalan bertahap di seluruh provinsi dengan standar gizi terukur.", "Pengawasan mutu dan keamanan pangan dilakukan di setiap dapur penyedia.", "Pengaduan menu atau distribusi dapat disampaikan melalui kanal resmi."], reach: 62, s: [34, 38, 28], progress: 48, target: "Jangkauan nasional bertahap" },
+        { id: "pp1", nama: "Makan Bergizi Gratis", kl: "Badan Gizi Nasional, Kemendikdasmen", status: "perhatian", narasi: "Program pemenuhan gizi anak sekolah dan ibu hamil untuk menyiapkan generasi unggul; memasuki tahun kedua dengan perluasan cakupan bertahap.", pesan: ["Program berjalan bertahap di seluruh provinsi dengan standar gizi terukur.", "Pengawasan mutu dan keamanan pangan dilakukan di setiap dapur penyedia.", "Pengaduan menu atau distribusi dapat disampaikan melalui kanal resmi."], reach: 66, s: [31, 39, 30], progress: 54, target: "Perluasan cakupan nasional (tahun ke-2)" },
         { id: "pp2", nama: "Swasembada Pangan", kl: "Kemenko Pangan, Kementan, Bapanas, Bulog", status: "ontrack", narasi: "Penguatan produksi dan cadangan pangan nasional untuk kemandirian dan stabilitas harga.", pesan: ["Stok dan distribusi pangan pokok dijaga melalui operasi pasar bila diperlukan.", "Produksi dalam negeri ditingkatkan lewat dukungan benih, pupuk, dan irigasi.", "Data harga dan stok dipublikasikan agar masyarakat memperoleh informasi akurat."], reach: 55, s: [28, 44, 28], progress: 40, target: "Peningkatan produksi padi & jagung" },
         { id: "pp3", nama: "Hilirisasi & Industrialisasi", kl: "Kemenko Perekonomian, Kementerian ESDM, Kemenperin", status: "ontrack", narasi: "Peningkatan nilai tambah sumber daya alam di dalam negeri untuk lapangan kerja dan pertumbuhan.", pesan: ["Hilirisasi menciptakan lapangan kerja dan nilai tambah di daerah penghasil.", "Kebijakan dijalankan dengan memperhatikan tata kelola lingkungan.", "Manfaat ekonomi diarahkan untuk masyarakat sekitar kawasan industri."], reach: 41, s: [26, 50, 24], progress: 35, target: "Perluasan ekosistem hilirisasi" },
         { id: "pp4", nama: "Sekolah Rakyat", kl: "Kemensos, Kemendikdasmen", status: "ontrack", narasi: "Sekolah berasrama gratis bagi anak dari keluarga kurang mampu untuk memutus rantai kemiskinan.", pesan: ["Pendaftaran dan seleksi dilakukan transparan dan tidak dipungut biaya.", "Sarana asrama dan pembelajaran disiapkan bertahap sesuai standar.", "Informasi resmi hanya melalui kanal pemerintah, waspadai penipuan."], reach: 38, s: [22, 52, 26], progress: 30, target: "Pembangunan unit bertahap" },
@@ -4062,9 +4107,9 @@
       const issueById = id => ISSUES.find(x => x.id === id);
 
       let ALERTS = [
-        { lvl: "neg", t: "Penyebaran terkoordinasi tautan bansos", d: "212 akun membagikan tautan identik dalam 40 menit di 5 provinsi. Pola khas phishing.", isu: "i3", w: "08.12" },
-        { lvl: "warn", t: "Lonjakan percakapan harga beras", d: "Naik 34% dalam 2 jam, terkonsentrasi di Jawa Barat dan Jawa Tengah.", isu: "i1", w: "07.58" },
-        { lvl: "neg", t: "Video gempa lama viral di Sulawesi Tengah", d: "1,2 jt tayangan; BMKG tidak mencatat gempa signifikan hari ini.", isu: "i5", w: "08.07" }
+        { lvl: "neg", t: "Penyebaran terkoordinasi tautan bansos akhir tahun", d: "248 akun membagikan tautan identik dalam 40 menit di 5 provinsi. Pola khas phishing.", isu: "i3", w: "08.12" },
+        { lvl: "warn", t: "Lonjakan laporan banjir & longsor", d: "Naik 44% dalam 2 jam seiring hujan lebat di Jateng, Jabar, dan Sumbar.", isu: "i4", w: "07.58" },
+        { lvl: "neg", t: "Video bencana lama viral di Sulawesi Tengah", d: "1,4 jt tayangan; BMKG tidak mencatat gempa signifikan hari ini.", isu: "i5", w: "08.07" }
       ];
 
       const base = {}; PROV.forEach(p => { base[p[0]] = 18 + Math.round(rnd() * 20); });
@@ -4089,21 +4134,35 @@
       function log(aksi, objek, detail) { const u = currentUser(); AUDIT.unshift({ w: new Date().toISOString(), by: u ? u.nama : "—", role: u ? u.role : "", aksi, objek, detail }); AUDIT = AUDIT.slice(0, 300); store.set(K.audit, AUDIT); if (curView() === "v-audit") renderAudit(); }
 
       /* =======================================================================
-         KONFIGURASI AI UNTUK DEMO (hosting mandiri, mis. GitHub Pages)
+         KONFIGURASI AI (hosting mandiri, mis. GitHub Pages)
          -----------------------------------------------------------------------
-         Isi API_KEY dengan kunci Anthropic Anda HANYA untuk demo. Saat halaman
-         dibuka di Claude, kunci ini TIDAK dipakai (otomatis memakai runtime Claude).
-         Kunci hanya dipakai bila halaman dibuka di luar Claude.
+         ATURAN: ADA kunci  -> AI AKTIF.   TIDAK ada kunci -> AI NONAKTIF
+                 (modul lain tetap jalan penuh).
+         Saat halaman dibuka DI DALAM Claude, runtime Claude otomatis dipakai
+         dan kunci ini tidak diperlukan.
       
-         ⚠️ PERINGATAN: kunci yang ditaruh di file ini akan TERLIHAT oleh siapa pun
-         yang membuka halaman (view-source). Untuk demo: pakai kunci sekali-pakai,
-         pasang batas belanja (spend limit) di Console Anthropic, cabut/hapus kunci
-         setelah demo, dan jangan commit kunci ke repo publik. Untuk produksi,
-         gunakan backend proxy — jangan pernah menaruh kunci di sisi klien.
+         Tiga cara mengisi kunci (pilih salah satu):
+           1) Tempel langsung di bawah  ->  const API_KEY="sk-ant-...";
+           2) Lewat URL sekali          ->  buka ...index.html?aikey=sk-ant-...
+              (otomatis tersimpan di browser via localStorage lalu URL bisa dibersihkan)
+           3) Lewat konsol browser      ->  setBakomAIKey("sk-ant-...")   /   clearBakomAIKey()
+      
+         ⚠️ PERINGATAN: kunci yang ditaruh di file/URL TERLIHAT publik (view-source).
+         Untuk demo: pakai kunci sekali-pakai, pasang spend limit di Console Anthropic,
+         cabut setelah demo, jangan commit kunci ke repo publik. Produksi: pakai backend proxy.
          ======================================================================= */
-      const API_KEY = "";            // <-- ISI MANUAL untuk demo, mis. "sk-ant-..."
-      const API_MODEL = "claude-sonnet-4-6";  // ganti bila perlu model lain
+      const API_KEY = "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";            // <-- ISI MANUAL di sini bila mau hard-code, mis. "sk-ant-..."
+      const API_MODEL = "claude-sonnet-4-6";  // ganti ke model yang aktif di akun Anda bila perlu
       const API_MAX_TOKENS = 2048;
+      function resolveApiKey() {
+        let k = API_KEY || "";
+        try { const u = new URLSearchParams(location.search).get("aikey"); if (u) { localStorage.setItem("bakom-aikey", u.trim()); } } catch (e) { }
+        try { if (!k) k = localStorage.getItem("bakom-aikey") || ""; } catch (e) { }
+        return (k || "").trim();
+      }
+      const HAS_KEY = () => resolveApiKey().length > 0;
+      window.setBakomAIKey = function (k) { try { localStorage.setItem("bakom-aikey", (k || "").trim()); } catch (e) { } location.reload(); };
+      window.clearBakomAIKey = function () { try { localStorage.removeItem("bakom-aikey"); } catch (e) { } location.reload(); };
 
       function directSample() {
         async function call(input, opts) {
@@ -4113,7 +4172,7 @@
           try {
             res = await fetch("https://api.anthropic.com/v1/messages", {
               method: "POST",
-              headers: { "content-type": "application/json", "x-api-key": API_KEY, "anthropic-version": "2023-06-01", "anthropic-dangerous-direct-browser-access": "true" },
+              headers: { "content-type": "application/json", "x-api-key": resolveApiKey(), "anthropic-version": "2023-06-01", "anthropic-dangerous-direct-browser-access": "true" },
               body: JSON.stringify({ model: API_MODEL, max_tokens: API_MAX_TOKENS, messages: msgs }),
               signal: opts.signal
             });
@@ -4130,7 +4189,7 @@
       }
 
       let samplePromise = null;
-      function getSample() { if (!samplePromise) { if (window.claude && typeof window.claude.use === "function") samplePromise = window.claude.use("sample").then(s => s || (API_KEY ? directSample() : null)).catch(() => API_KEY ? directSample() : null); else samplePromise = Promise.resolve(API_KEY ? directSample() : null); } return samplePromise; }
+      function getSample() { if (!samplePromise) { if (window.claude && typeof window.claude.use === "function") samplePromise = window.claude.use("sample").then(s => s || (HAS_KEY() ? directSample() : null)).catch(() => HAS_KEY() ? directSample() : null); else samplePromise = Promise.resolve(HAS_KEY() ? directSample() : null); } return samplePromise; }
       let aiBlocked = false;
       const ERR = { not_granted: "Akses AI tidak diizinkan untuk halaman ini.", sampling_disabled: "AI tidak tersedia untuk akun ini.", not_declared: "AI tidak tersedia di halaman ini.", capability_disabled: "AI tidak dapat digunakan di tampilan ini.", capability_removed: "Perbarui aplikasi Claude untuk memakai AI.", rate_limited: "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.", session_expired: "Sesi berakhir. Masuk kembali ke Claude.", refused: "AI menolak masukan ini. Ubah teks lalu coba lagi.", empty_completion: "AI tidak menghasilkan jawaban. Sederhanakan lalu coba lagi.", invalid_json: "Format jawaban AI tidak terbaca. Coba lagi.", upstream_error: "Gangguan koneksi ke layanan AI. Coba lagi.", prompt_too_large: "Masukan terlalu panjang. Persingkat teks." };
       const HIDE = ["not_granted", "sampling_disabled", "not_declared", "capability_disabled", "capability_removed"];
@@ -5089,7 +5148,7 @@ Balas HANYA satu JSON valid tanpa markdown:
             { id: uid(), judul: "Klarifikasi hoaks gempa Sulteng", teks: "Terbitkan klarifikasi resmi bahwa tidak ada gempa signifikan hari ini; sertakan rujukan BMKG dan imbauan tetap tenang.", target: ["BMKG", "BNPB", "Komdigi"], deadline: "hari ini 12.00", issueId: "i5", status: "dikerjakan", by: "Operator Command Center", at: min(40) },
             { id: uid(), judul: "Data stok & operasi pasar beras", teks: "Sampaikan data stok resmi dan jadwal operasi pasar untuk wilayah terdampak kenaikan harga.", target: ["Bapanas", "Perum Bulog", "Kemendag"], deadline: "H+1", issueId: "i1", status: "diterima", by: "Kepala Bakom", at: min(55) },
             { id: uid(), judul: "Narasi distribusi Makan Bergizi Gratis", teks: "Selaraskan narasi distribusi MBG dan jalur pengaduan resmi di daerah.", target: ["Badan Gizi Nasional", "Kemendikdasmen", "Humas pemda kab/kota"], deadline: "H+2", issueId: "i2", status: "terkirim", by: "Analis Verifikasi", at: min(20) },
-            { id: uid(), judul: "Imbauan kualitas udara Jabodetabek", teks: "Terbitkan imbauan kesehatan dan langkah mitigasi terkait kualitas udara.", target: ["Kementerian LH", "Kemenkes", "Pemprov terkait"], deadline: "selesai", issueId: "i6", status: "selesai", by: "Operator Command Center", at: min(180) }
+            { id: uid(), judul: "Imbauan pencegahan DBD musim hujan", teks: "Terbitkan imbauan 3M Plus, jadwal fogging, dan pengenalan gejala DBD; dorong masyarakat segera ke faskes bila demam tinggi.", target: ["Kemenkes", "Pemprov terkait", "Humas pemda kab/kota"], deadline: "selesai", issueId: "i6", status: "selesai", by: "Operator Command Center", at: min(180) }
           ); saveDirs();
         }
         // 7) Kampanye
@@ -5112,7 +5171,7 @@ Balas HANYA satu JSON valid tanpa markdown:
         if (!BRIEFS.length) {
           BRIEFS.push(
             { id: uid(), at: min(60), by: "Kepala Bakom", ni: 46, text: "## Situasi utama\n- Indeks ketegangan nasional pada kategori Waspada.\n- Dua hoaks aktif (tautan bansos dan video gempa lama) tengah ditangani.\n- Harga beras menjadi isu ekonomi dengan laju tertinggi.\n## Hoaks yang perlu diklarifikasi\n- Tautan pencairan bansos (phishing) — klarifikasi & pemblokiran.\n- Video gempa lama Sulteng — klarifikasi serentak dengan BMKG.\n## Keputusan yang dibutuhkan dari Kepala Bakom\n- Persetujuan rencana aksi harga beras (P1).\n- Arahan koordinasi lintas K/L untuk klarifikasi hoaks." },
-            { id: uid(), at: now - 26 * 3600000, by: "Analis Verifikasi", ni: 42, text: "## Situasi utama\n- Kondisi relatif terkendali dengan beberapa isu layanan publik.\n- Antusiasme CPNS 2026 menjadi sentimen positif dominan.\n## Wilayah yang perlu perhatian\n- Kalimantan: antrean BBM bersubsidi." }
+            { id: uid(), at: now - 26 * 3600000, by: "Analis Verifikasi", ni: 42, text: "## Situasi utama\n- Kondisi relatif terkendali dengan beberapa isu layanan publik.\n- Pengumuman hasil seleksi CASN/PPPK 2026 menjadi sentimen positif dominan.\n## Wilayah yang perlu perhatian\n- Kalimantan: antrean BBM bersubsidi." }
           ); saveBriefs();
         }
         // 10) Jejak audit
@@ -5132,11 +5191,47 @@ Balas HANYA satu JSON valid tanpa markdown:
       $("#clearAudit").onclick = async () => { if (await uiConfirm("Kosongkan seluruh jejak audit?")) { AUDIT = []; store.set(K.audit, AUDIT); renderAudit(); } };
 
       const curView = () => (document.querySelector(".view:not([hidden])") || {}).id;
+      /* ===== ANIMASI "GAYA SLIDE" (angka menghitung, bar tumbuh, panel muncul bertahap) ===== */
+      const REDUCED = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+      function countUp(el, dur) {
+        if (!el || REDUCED()) return; const full = (el.textContent || "").trim(); const m = full.match(/^(\D*?)([\d.,]+)(.*)$/); if (!m) return;
+        const pre = m[1], body = m[2], suf = m[3];
+        const hasDot = body.includes("."), hasComma = body.includes(",");
+        const idGrouped = hasComma || /^\d+(\.\d{3})+$/.test(body); // id-ID: titik ribuan / koma desimal
+        let target, dec;
+        if (idGrouped) { target = parseFloat(body.replace(/\./g, "").replace(",", ".")); const d = body.split(",")[1]; dec = d ? d.length : 0; }
+        else { target = parseFloat(body); const d = hasDot ? body.split(".")[1] : null; dec = d ? d.length : 0; } // gaya JS: titik desimal
+        if (!isFinite(target)) return;
+        const fmtN = x => idGrouped ? pre + x.toLocaleString("id-ID", { minimumFractionDigits: dec, maximumFractionDigits: dec }) + suf
+          : pre + x.toFixed(dec) + suf;
+        const t0 = performance.now();
+        el.textContent = fmtN(0);
+        (function step(now) { const p = Math.min(1, (now - t0) / dur); const e = 1 - Math.pow(1 - p, 3); el.textContent = fmtN(target * e); if (p < 1) requestAnimationFrame(step); else el.textContent = full; })(t0);
+      }
+      function growBars(root) {
+        if (REDUCED()) return;
+        root.querySelectorAll(".sbar span, .hbar .t span, .progress span, .conf .track span").forEach(s => {
+          const w = s.style.width; if (!w || w === "0%") return;
+          s.classList.add("growbar"); s.style.transition = "none"; s.style.width = "0%"; void s.offsetWidth; s.style.transition = "";
+          requestAnimationFrame(() => { s.style.width = w; });
+        });
+      }
+      function revealView(v) {
+        const root = document.getElementById("v-" + v); if (!root || REDUCED()) return;
+        let i = 0;
+        root.querySelectorAll(".panel,.kpi-card,.metric,.pres-hero,.pres-reco,.pres-card,.progcard,.appr-item").forEach(b => {
+          if (i > 18) return; b.classList.remove("rise"); void b.offsetWidth; b.style.animationDelay = (i * 55) + "ms"; b.classList.add("rise"); i++;
+        });
+        root.querySelectorAll(".chart,.spark,#map").forEach(c => { c.classList.remove("charten"); void c.offsetWidth; c.classList.add("charten"); });
+        growBars(root);
+        root.querySelectorAll(".pulse .v, .kpi-card .v, .pres-gauge .num, .pres-stat .v, .metric .v").forEach(el => countUp(el, 900));
+      }
       function show(v) {
         const allow = ROLE_VIEWS[ROLE] || []; if (!allow.includes(v)) v = allow[0] || "cc"; document.querySelectorAll(".view").forEach(s => s.hidden = s.id !== "v-" + v); document.querySelectorAll(".nav").forEach(b => { if (b.dataset.view === v) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current"); });
         { const av = document.getElementById("v-" + v); if (av) { av.classList.remove("enter"); void av.offsetWidth; av.classList.add("enter"); } }
         if (v === "amplify") renderAmpSelect(); if (v === "campaign") renderCampaigns(); if (v === "approve") renderApprovals(); if (v === "brief") renderBriefArch(); if (v === "audit") renderAudit(); if (v === "plan") renderPlanSelect(); if (v === "verify") renderQueue(); if (v === "crisis") renderCrisis(); if (v === "koord") renderKoord(); if (v === "kpi") renderKPI(); if (v === "program") renderProgram(); if (v === "presiden") renderPresiden();
         if (v === "arch") document.querySelectorAll("#v-arch .flow .node.click").forEach(n => n.onclick = () => { const t = n.dataset.archgo; if ((ROLE_VIEWS[ROLE] || []).includes(t)) show(t); else toast("Modul ini di luar kewenangan peran Anda."); });
+        requestAnimationFrame(() => revealView(v));
         window.scrollTo(0, 0);
       }
       document.querySelectorAll(".nav").forEach(b => b.onclick = () => show(b.dataset.view));
@@ -5175,6 +5270,7 @@ Balas HANYA satu JSON valid tanpa markdown:
         setInterval(stepDirs, 5200); setInterval(checkEscalation, 9000); setInterval(() => { ISSUES.forEach(i => { if (i.histNeg) { i.histNeg.push(i.s[0]); i.histNeg = i.histNeg.slice(-16); } }); saveIssues(); }, 9000);
         setInterval(() => { if (curView() === "v-cc") { renderMapActive(); renderIssues(); if (selProv) renderProvInfo(); } }, 15000);
         const curV = ((document.querySelector(".view:not([hidden])") || {}).id || "").replace("v-", ""); if (curV && curV !== "cc") show(curV);
+        requestAnimationFrame(() => revealView(curV || "cc"));
         getSample().then(s => { if (!s) disableAI(); });
       }
       const sess = currentUser(); if (sess) { enterApp(sess); } else { $("#liUser").focus(); }
