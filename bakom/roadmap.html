@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Peta Jalan BAKOM</title>
+<meta name="description" content="Peta jalan implementasi BAKOM GCOS 2026–2030: fase tahunan, workstream, gate keputusan, dan target KPI.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF1F6; --panel:#FFFFFF; --panel2:#F4F6FA; --line:#D6DDE9;
+  --ink:#13203A; --ink2:#56667F; --ink3:#8391A8;
+  --gold:#9C6F0C; --gold-soft:#F6EBCF; --neg:#C73C39; --pos:#1E8C74; --warn:#B8690A; --neu:#7C8AA2; --sel:#2B5BD7;
+  /* akcen per tahun (progresif) */
+  --y1:#2B5BD7; --y2:#0E7C86; --y3:#1E8C74; --y4:#9C6F0C; --y5:#6D4AB8;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0D1626; --panel:#142039; --panel2:#1A2946; --line:#263A5E;
+    --ink:#E7ECF4; --ink2:#9DACC5; --ink3:#6E7F9E;
+    --gold:#E4B643; --gold-soft:#3A3020; --neg:#F06764; --pos:#3DC7A8; --warn:#F2A940; --neu:#8E9DB8; --sel:#7EA3FF;
+    --y1:#7EA3FF; --y2:#39C2CE; --y3:#3DC7A8; --y4:#E4B643; --y5:#A58BF0;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0D1626; --panel:#142039; --panel2:#1A2946; --line:#263A5E;
+  --ink:#E7ECF4; --ink2:#9DACC5; --ink3:#6E7F9E;
+  --gold:#E4B643; --gold-soft:#3A3020; --neg:#F06764; --pos:#3DC7A8; --warn:#F2A940; --neu:#8E9DB8; --sel:#7EA3FF;
+  --y1:#7EA3FF; --y2:#39C2CE; --y3:#3DC7A8; --y4:#E4B643; --y5:#A58BF0;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);
+  font-family:"Archivo",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:15px;line-height:1.5;
+  font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 22px 64px}
+h1,h2,h3{margin:0;font-weight:700;letter-spacing:-.01em}
+.muted{color:var(--ink2)}
+.tiny{font-size:12.5px}
+a{color:var(--sel)}
+
+/* ===== KOP / HEADER ===== */
+.kop{display:flex;align-items:center;gap:16px;border-bottom:3px double var(--ink2);padding-bottom:18px;margin-bottom:8px;flex-wrap:wrap}
+.kop .logo{width:54px;height:54px;border-radius:11px;background:var(--ink);color:var(--panel);display:grid;place-items:center;font-weight:800;font-size:26px;flex:none}
+.kop h2{font-size:17px;letter-spacing:.02em}
+.kop .sub{font-size:13px;color:var(--ink2)}
+.kop .clsf{margin-left:auto;border:1px solid var(--gold);color:var(--gold);background:var(--gold-soft);font-size:11px;font-weight:700;letter-spacing:.08em;padding:4px 10px;border-radius:4px;align-self:flex-start}
+.title{font-size:34px;font-weight:800;letter-spacing:-.02em;margin:18px 0 4px;line-height:1.1}
+.lead{font-size:17px;color:var(--ink2);max-width:80ch;margin:0 0 6px}
+.themebtn{position:fixed;top:16px;right:16px;z-index:50;width:38px;height:38px;border-radius:9px;border:1px solid var(--line);background:var(--panel);color:var(--ink2);cursor:pointer;font-size:16px;box-shadow:0 4px 14px rgba(5,12,28,.12)}
+
+/* ===== SECTION ===== */
+section{margin-top:34px}
+.shead{display:flex;align-items:baseline;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.shead h2{font-size:21px}
+.shead .k{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);border-radius:20px;padding:3px 11px}
+.shead p{margin:0;color:var(--ink2);font-size:14px}
+
+/* ===== TIMELINE OVERVIEW (5 kolom) ===== */
+.timeline{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+.yr{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:0;overflow:hidden;position:relative;display:flex;flex-direction:column}
+.yr .bar{height:6px;background:var(--yc)}
+.yr .pad{padding:16px 16px 18px}
+.yr .ph{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--yc)}
+.yr .num{font-size:30px;font-weight:800;line-height:1;margin:2px 0 2px}
+.yr .thm{font-size:15px;font-weight:700;margin-bottom:8px;min-height:40px}
+.yr .goal{font-size:13px;color:var(--ink2);line-height:1.5}
+.yr .scope{margin-top:12px;padding-top:10px;border-top:1px dashed var(--line);font-size:12.5px}
+.yr .scope b{display:block;color:var(--ink3);font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px}
+
+/* kurva kematangan */
+.maturity{margin-top:16px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.maturity svg{width:100%;height:auto;display:block}
+.mlabels{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:6px;font-size:11.5px;color:var(--ink2);text-align:center}
+
+/* ===== SWIMLANE ===== */
+.swim-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--panel)}
+.swim{min-width:900px;border-collapse:collapse;width:100%}
+.swim th,.swim td{border:1px solid var(--line);vertical-align:top;padding:12px 13px}
+.swim thead th{background:var(--panel2);position:sticky;top:0;font-size:13px;text-align:center}
+.swim thead th .ylab{font-weight:800;font-size:15px}
+.swim thead th .yph{display:block;font-size:11px;font-weight:600;color:var(--ink2);margin-top:1px}
+.swim thead th.wscol{text-align:left;min-width:150px;background:var(--panel)}
+.swim .wsname{font-weight:700;font-size:13.5px}
+.swim .wsname small{display:block;color:var(--ink3);font-weight:500;font-size:11px;margin-top:2px}
+.swim td ul{margin:0;padding-left:16px}
+.swim td li{font-size:12.5px;margin:0 0 4px;line-height:1.45}
+.swim td.y1{background:color-mix(in srgb,var(--y1) 8%,transparent)}
+.swim td.y2{background:color-mix(in srgb,var(--y2) 8%,transparent)}
+.swim td.y3{background:color-mix(in srgb,var(--y3) 8%,transparent)}
+.swim td.y4{background:color-mix(in srgb,var(--y4) 9%,transparent)}
+.swim td.y5{background:color-mix(in srgb,var(--y5) 9%,transparent)}
+.swim .yhead.y1{box-shadow:inset 0 3px 0 var(--y1)}
+.swim .yhead.y2{box-shadow:inset 0 3px 0 var(--y2)}
+.swim .yhead.y3{box-shadow:inset 0 3px 0 var(--y3)}
+.swim .yhead.y4{box-shadow:inset 0 3px 0 var(--y4)}
+.swim .yhead.y5{box-shadow:inset 0 3px 0 var(--y5)}
+.scrollhint{font-size:12px;color:var(--ink3);margin-top:6px}
+
+/* ===== GATES ===== */
+.gates{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.gate{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--gc);border-radius:10px;padding:14px}
+.gate .g{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gc)}
+.gate h3{font-size:14px;margin:4px 0 6px}
+.gate p{margin:0;font-size:12.5px;color:var(--ink2);line-height:1.5}
+
+/* ===== KPI ===== */
+.kpi-tbl{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.kpi-tbl th,.kpi-tbl td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:center}
+.kpi-tbl th{background:var(--panel2);font-size:12px;color:var(--ink2);font-weight:600}
+.kpi-tbl td:first-child,.kpi-tbl th:first-child{text-align:left;font-weight:600}
+.kpi-tbl tr:last-child td{border-bottom:0}
+.kpi-tbl .goalcell{color:var(--pos);font-weight:700}
+
+/* ===== INVEST ===== */
+.invest{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.inv{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 14px 16px;text-align:center}
+.inv .yl{font-size:12px;font-weight:700;color:var(--yc)}
+.inv .track{height:120px;display:flex;flex-direction:column-reverse;gap:2px;margin:10px 0 8px;justify-content:flex-start}
+.inv .seg{border-radius:4px}
+.inv .seg.capex{background:var(--yc)}
+.inv .seg.opex{background:color-mix(in srgb,var(--yc) 32%,transparent)}
+.inv .cap{font-size:11.5px;color:var(--ink2)}
+
+/* ===== PRINSIP / RISIKO ===== */
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.card h3{font-size:15px;margin-bottom:10px}
+.card ul{margin:0;padding-left:18px}
+.card li{font-size:13.5px;margin:0 0 7px;line-height:1.5}
+.pill{display:inline-block;font-size:12px;font-weight:600;background:var(--panel2);border:1px solid var(--line);border-radius:20px;padding:4px 11px;margin:0 4px 6px 0}
+
+.foot{margin-top:40px;border-top:1px solid var(--line);padding-top:16px;font-size:12px;color:var(--ink3);line-height:1.6}
+
+/* reveal */
+section{opacity:0;transform:translateY(14px);animation:rise .6s ease-out forwards}
+@keyframes rise{to{opacity:1;transform:none}}
+.yr,.gate,.inv{opacity:0;animation:pop .5s ease-out forwards}
+@keyframes pop{to{opacity:1}}
+.timeline .yr:nth-child(1){animation-delay:.05s}.timeline .yr:nth-child(2){animation-delay:.12s}
+.timeline .yr:nth-child(3){animation-delay:.19s}.timeline .yr:nth-child(4){animation-delay:.26s}
+.timeline .yr:nth-child(5){animation-delay:.33s}
+
+@media (max-width:1000px){
+  .timeline,.gates,.invest{grid-template-columns:repeat(2,1fr)}
+  .mlabels{display:none}
+}
+@media (max-width:620px){
+  .wrap{padding:20px 14px 48px}
+  .title{font-size:26px}
+  .lead{font-size:15px}
+  .timeline,.gates,.invest,.cols2{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}section,.yr,.gate,.inv{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<button class="themebtn" id="themeBtn" aria-label="Ganti tema">◐</button>
+<div class="wrap">
+
+  <div class="kop">
+    <div class="logo">B</div>
+    <div>
+      <h2>BADAN KOMUNIKASI PEMERINTAH</h2>
+      <div class="sub">Government Communication Operating System · GCOS</div>
+    </div>
+    <span class="clsf">RENCANA · PROTOTIPE</span>
+  </div>
+
+  <h1 class="title">Peta Jalan Implementasi 2026–2030</h1>
+  <p class="lead">Rancangan implementasi lima tahun BAKOM GCOS: dari fondasi dan pilot menuju platform komunikasi pemerintah berskala nasional yang mandiri. Setiap tahun ditutup gate keputusan — tahap berikutnya hanya dimulai bila kriteria kelulusan terpenuhi.</p>
+
+  <!-- ===== OVERVIEW TIMELINE ===== -->
+  <section>
+    <div class="shead"><h2>Fase per Tahun</h2><p>Lima fase berurutan, masing-masing dengan tema, sasaran, dan cakupan adopsi.</p></div>
+    <div class="timeline">
+      <div class="yr" style="--yc:var(--y1)"><div class="bar"></div><div class="pad">
+        <div class="ph">Fase 1 · 2026</div><div class="num">2026</div>
+        <div class="thm">Fondasi &amp; Pilot</div>
+        <div class="goal">Dasar hukum, platform data, dan AI Core versi awal. Command Center &amp; Public Listening berjalan sebagai pilot di Bakom pusat.</div>
+        <div class="scope"><b>Cakupan</b>Bakom pusat + 3–5 K/L inti + 1–2 pemda percontohan</div>
+      </div></div>
+
+      <div class="yr" style="--yc:var(--y2)"><div class="bar"></div><div class="pad">
+        <div class="ph">Fase 2 · 2027</div><div class="num">2027</div>
+        <div class="thm">Skala Inti &amp; Krisis</div>
+        <div class="goal">Perluasan ke K/L prioritas, Government Network aktif, Ruang Krisis &amp; Amplifikasi operasional, SOC 24/7 berdiri.</div>
+        <div class="scope"><b>Cakupan</b>~15 K/L prioritas + pemda provinsi terpilih</div>
+      </div></div>
+
+      <div class="yr" style="--yc:var(--y3)"><div class="bar"></div><div class="pad">
+        <div class="ph">Fase 3 · 2028</div><div class="num">2028</div>
+        <div class="thm">Integrasi &amp; Kedalaman</div>
+        <div class="goal">Dashboard regional, knowledge graph isu, early warning prediktif, dan integrasi data daerah di seluruh provinsi.</div>
+        <div class="scope"><b>Cakupan</b>Seluruh K/L + 38 pemda provinsi</div>
+      </div></div>
+
+      <div class="yr" style="--yc:var(--y4)"><div class="bar"></div><div class="pad">
+        <div class="ph">Fase 4 · 2029</div><div class="num">2029</div>
+        <div class="thm">Optimalisasi &amp; Kemandirian</div>
+        <div class="goal">Model bahasa berdaulat, audit independen, manajemen kinerja berbasis KPI, dan pemda kabupaten/kota gelombang 1.</div>
+        <div class="scope"><b>Cakupan</b>Provinsi penuh + kab/kota gelombang 1</div>
+      </div></div>
+
+      <div class="yr" style="--yc:var(--y5)"><div class="bar"></div><div class="pad">
+        <div class="ph">Fase 5 · 2030</div><div class="num">2030</div>
+        <div class="thm">Skala Nasional &amp; Keberlanjutan</div>
+        <div class="goal">Operasi nasional 24/7 yang matang dan mandiri, pelembagaan budaya &amp; SDM, serta transfer pengetahuan ke daerah.</div>
+        <div class="scope"><b>Cakupan</b>Nasional: pusat, 38 provinsi, kab/kota prioritas</div>
+      </div></div>
+    </div>
+
+    <div class="maturity">
+      <svg viewBox="0 0 1000 150" role="img" aria-label="Kurva kematangan kapabilitas naik dari pilot ke skala nasional">
+        <defs><linearGradient id="mg" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="var(--y1)"/><stop offset="25%" stop-color="var(--y2)"/>
+          <stop offset="50%" stop-color="var(--y3)"/><stop offset="75%" stop-color="var(--y4)"/>
+          <stop offset="100%" stop-color="var(--y5)"/></linearGradient></defs>
+        <path d="M30,122 C210,118 250,96 390,84 C530,72 560,56 690,44 C820,32 880,22 970,16"
+              fill="none" stroke="url(#mg)" stroke-width="4" stroke-linecap="round"/>
+        <g font-size="11" fill="var(--ink3)">
+          <circle cx="30" cy="122" r="5" fill="var(--y1)"/><circle cx="265" cy="94" r="5" fill="var(--y2)"/>
+          <circle cx="500" cy="68" r="5" fill="var(--y3)"/><circle cx="735" cy="40" r="5" fill="var(--y4)"/>
+          <circle cx="970" cy="16" r="5" fill="var(--y5)"/>
+        </g>
+      </svg>
+      <div class="mlabels">
+        <div>Pilot terkendali</div><div>Skala inti + krisis</div><div>Integrasi nasional</div><div>Mandiri &amp; teroptimasi</div><div>Skala penuh berkelanjutan</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SWIMLANE ===== -->
+  <section>
+    <div class="shead"><h2>Milestone per Workstream</h2><p>Enam alur kerja paralel yang berkembang tiap tahun. Warna kolom menandai tahun.</p></div>
+    <div class="swim-scroll">
+      <table class="swim">
+        <thead><tr>
+          <th class="wscol">Workstream</th>
+          <th class="yhead y1"><span class="ylab">2026</span><span class="yph">Fondasi</span></th>
+          <th class="yhead y2"><span class="ylab">2027</span><span class="yph">Skala inti</span></th>
+          <th class="yhead y3"><span class="ylab">2028</span><span class="yph">Integrasi</span></th>
+          <th class="yhead y4"><span class="ylab">2029</span><span class="yph">Kemandirian</span></th>
+          <th class="yhead y5"><span class="ylab">2030</span><span class="yph">Skala nasional</span></th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td class="wscol"><span class="wsname">Cakupan &amp; Adopsi<small>Siapa yang memakai</small></span></td>
+            <td class="y1"><ul><li>Pilot Bakom pusat</li><li>3–5 K/L inti</li><li>1–2 pemda percontohan</li></ul></td>
+            <td class="y2"><ul><li>±15 K/L prioritas</li><li>Pemda provinsi terpilih</li></ul></td>
+            <td class="y3"><ul><li>Seluruh K/L</li><li>38 pemda provinsi</li></ul></td>
+            <td class="y4"><ul><li>Provinsi penuh</li><li>Kab/kota gelombang 1</li></ul></td>
+            <td class="y5"><ul><li>Pusat + 38 provinsi</li><li>Kab/kota prioritas</li><li>Operasi mandiri 24/7</li></ul></td>
+          </tr>
+          <tr>
+            <td class="wscol"><span class="wsname">Platform &amp; Data<small>Infrastruktur, ingesti, kualitas data</small></span></td>
+            <td class="y1"><ul><li>Data lakehouse</li><li>Konektor API legal (SP4N-LAPOR!, kanal resmi, sosmed, media)</li><li>Anonimisasi PII baseline</li></ul></td>
+            <td class="y2"><ul><li>Skala throughput nasional</li><li>IAM lintas instansi</li><li>Metadata &amp; mutu data</li></ul></td>
+            <td class="y3"><ul><li>Knowledge graph isu</li><li>Integrasi Satu Data &amp; data daerah</li><li>High-availability multi-region</li></ul></td>
+            <td class="y4"><ul><li>Kedaulatan data penuh</li><li>Optimasi biaya &amp; performa</li><li>Disaster recovery teruji</li></ul></td>
+            <td class="y5"><ul><li>Platform matang &amp; mandiri</li><li>SLA nasional</li><li>Audit arsitektur independen</li></ul></td>
+          </tr>
+          <tr>
+            <td class="wscol"><span class="wsname">AI Core &amp; Analitik<small>Model, deteksi, evaluasi</small></span></td>
+            <td class="y1"><ul><li>NLP sentimen Bahasa Indonesia</li><li>Klasifikasi topik + deteksi hoaks v1</li><li>RAG regulasi · guardrail dasar</li></ul></td>
+            <td class="y2"><ul><li>Deteksi jaringan penyebaran</li><li>Bahasa daerah utama</li><li>Generator rencana aksi &amp; konten</li></ul></td>
+            <td class="y3"><ul><li>Early warning prediktif</li><li>Analisis multimodal (gambar/video)</li><li>HITL terukur</li></ul></td>
+            <td class="y4"><ul><li>Model bahasa berdaulat (ID + daerah)</li><li>Benchmark akurasi independen</li><li>MLOps penuh</li></ul></td>
+            <td class="y5"><ul><li>Peningkatan berkelanjutan</li><li>Pustaka model nasional</li><li>Transfer ke instansi</li></ul></td>
+          </tr>
+          <tr>
+            <td class="wscol"><span class="wsname">Modul Layanan &amp; Operasi<small>Fitur yang dipakai harian</small></span></td>
+            <td class="y1"><ul><li>Command Center</li><li>Public Listening</li><li>Verifikasi / fact-check</li><li>Early Warning (pilot)</li></ul></td>
+            <td class="y2"><ul><li>Ruang Krisis</li><li>Amplifikasi &amp; Diseminasi</li><li>Government Network</li><li>Bakom Brief · Persetujuan</li></ul></td>
+            <td class="y3"><ul><li>Dashboard regional</li><li>Program Prioritas lanjutan</li><li>KPI &amp; kinerja · integrasi penuh</li></ul></td>
+            <td class="y4"><ul><li>Otomasi alur kerja</li><li>Playbook krisis nasional</li><li>Operasi 24/7 matang</li></ul></td>
+            <td class="y5"><ul><li>Pusat komando + simpul regional</li><li>Kesinambungan layanan</li><li>Standar operasi baku</li></ul></td>
+          </tr>
+          <tr>
+            <td class="wscol"><span class="wsname">Kelembagaan &amp; SDM<small>Tim, SOP, pelatihan</small></span></td>
+            <td class="y1"><ul><li>Struktur tim Bakom</li><li>SOP inti · RBAC</li><li>Pelatihan analis gelombang 1</li></ul></td>
+            <td class="y2"><ul><li>Tim operasi 24/7</li><li>Sertifikasi analis &amp; jubir</li><li>SOP krisis</li></ul></td>
+            <td class="y3"><ul><li>Pusat pelatihan Bakom</li><li>Kurikulum komunikasi pemerintah</li><li>Kerja sama akademik</li></ul></td>
+            <td class="y4"><ul><li>Manajemen kinerja berbasis KPI</li><li>Jenjang karier · retensi talenta</li></ul></td>
+            <td class="y5"><ul><li>Pelembagaan budaya kerja</li><li>Keberlanjutan SDM</li><li>Transfer kapasitas ke daerah</li></ul></td>
+          </tr>
+          <tr>
+            <td class="wscol"><span class="wsname">Tata Kelola, Keamanan &amp; Hukum<small>Kepatuhan, SOC, audit</small></span></td>
+            <td class="y1"><ul><li>Dasar hukum (Perpres 96/2025, Permensesneg 9/2025)</li><li>Kebijakan privasi (UU 27/2022)</li><li>Jejak audit · HITL</li></ul></td>
+            <td class="y2"><ul><li>Zero Trust &amp; SOC 24/7</li><li>DPIA</li><li>HITL formal</li></ul></td>
+            <td class="y3"><ul><li>Sertifikasi keamanan (mis. ISO 27001)</li><li>Audit kepatuhan data</li><li>Kerangka etika AI</li></ul></td>
+            <td class="y4"><ul><li>Audit independen tahunan</li><li>Uji penetrasi berkala</li><li>Tata kelola AI matang</li></ul></td>
+            <td class="y5"><ul><li>Akreditasi nasional</li><li>Audit publik transparan</li><li>Tata kelola berkelanjutan</li></ul></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="scrollhint">↔ Geser tabel ke samping untuk melihat seluruh tahun pada layar kecil.</p>
+  </section>
+
+  <!-- ===== GATES ===== -->
+  <section>
+    <div class="shead"><h2>Gate Keputusan</h2><span class="k">Stage-gate</span><p>Akhir tiap fase adalah titik keputusan lanjut/tahan. Fase berikutnya tidak dimulai sebelum gate lulus.</p></div>
+    <div class="gates">
+      <div class="gate" style="--gc:var(--y1)"><div class="g">Akhir 2026</div><h3>Gate A — Legal &amp; Pilot</h3><p>Dasar hukum &amp; tata kelola disahkan; pilot Command Center diterima pengguna (pilot acceptance).</p></div>
+      <div class="gate" style="--gc:var(--y2)"><div class="g">Akhir 2027</div><h3>Gate B — Keamanan &amp; Skala</h3><p>Zero Trust &amp; SOC 24/7 siap; perluasan ke K/L prioritas diterima dan stabil.</p></div>
+      <div class="gate" style="--gc:var(--y3)"><div class="g">Akhir 2028</div><h3>Gate C — Integrasi Nasional</h3><p>Integrasi data daerah &amp; knowledge graph terbukti; dashboard regional operasional di 38 provinsi.</p></div>
+      <div class="gate" style="--gc:var(--y4)"><div class="g">Akhir 2029</div><h3>Gate D — Audit &amp; Kemandirian</h3><p>Audit independen lulus; model bahasa berdaulat memenuhi benchmark akurasi.</p></div>
+      <div class="gate" style="--gc:var(--y5)"><div class="g">Akhir 2030</div><h3>Gate E — Skala &amp; Keberlanjutan</h3><p>Skala nasional penuh tercapai; operasi, SDM, dan anggaran berkelanjutan terbukti.</p></div>
+    </div>
+  </section>
+
+  <!-- ===== KPI ===== -->
+  <section>
+    <div class="shead"><h2>Target KPI Bertahap</h2><p>Indikator kunci yang ditingkatkan tahun demi tahun. Angka bersifat target indikatif — ditetapkan final bersama pimpinan.</p></div>
+    <div style="overflow-x:auto">
+    <table class="kpi-tbl">
+      <thead><tr><th>Indikator</th><th>2026</th><th>2027</th><th>2028</th><th>2029</th><th class="goalcell">2030</th></tr></thead>
+      <tbody>
+        <tr><td>Waktu respons rata-rata isu</td><td>≤ 6 jam</td><td>≤ 4 jam</td><td>≤ 3 jam</td><td>≤ 2,5 jam</td><td class="goalcell">≤ 2 jam</td></tr>
+        <tr><td>Hoaks diklarifikasi &lt; 2 jam</td><td>50%</td><td>70%</td><td>85%</td><td>90%</td><td class="goalcell">≥ 95%</td></tr>
+        <tr><td>Akurasi AI vs putusan analis</td><td>80%</td><td>85%</td><td>88%</td><td>90%</td><td class="goalcell">≥ 92%</td></tr>
+        <tr><td>Cakupan provinsi terpantau</td><td>Pilot</td><td>Terpilih</td><td>38 penuh</td><td>+ kab/kota</td><td class="goalcell">Nasional</td></tr>
+        <tr><td>K/L terintegrasi</td><td>3–5</td><td>±15</td><td>Seluruh K/L</td><td>Seluruh K/L</td><td class="goalcell">Seluruh K/L</td></tr>
+        <tr><td>Peringatan dini direspons</td><td>70%</td><td>80%</td><td>85%</td><td>90%</td><td class="goalcell">≥ 90%</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <!-- ===== INVEST ===== -->
+  <section>
+    <div class="shead"><h2>Pola Investasi</h2><p>Komposisi relatif belanja: dominan investasi (capex) di awal untuk membangun, bergeser ke operasi (opex) saat platform matang.</p></div>
+    <div class="invest">
+      <div class="inv" style="--yc:var(--y1)"><div class="yl">2026</div><div class="track"><div class="seg capex" style="height:72%"></div><div class="seg opex" style="height:16%"></div></div><div class="cap">Capex tinggi · bangun fondasi</div></div>
+      <div class="inv" style="--yc:var(--y2)"><div class="yl">2027</div><div class="track"><div class="seg capex" style="height:64%"></div><div class="seg opex" style="height:30%"></div></div><div class="cap">Capex skala + opex naik</div></div>
+      <div class="inv" style="--yc:var(--y3)"><div class="yl">2028</div><div class="track"><div class="seg capex" style="height:46%"></div><div class="seg opex" style="height:44%"></div></div><div class="cap">Seimbang · integrasi</div></div>
+      <div class="inv" style="--yc:var(--y4)"><div class="yl">2029</div><div class="track"><div class="seg capex" style="height:30%"></div><div class="seg opex" style="height:52%"></div></div><div class="cap">Opex dominan · optimasi</div></div>
+      <div class="inv" style="--yc:var(--y5)"><div class="yl">2030</div><div class="track"><div class="seg capex" style="height:22%"></div><div class="seg opex" style="height:58%"></div></div><div class="cap">Operasi berkelanjutan</div></div>
+    </div>
+    <p class="tiny muted" style="margin-top:10px">Bar menunjukkan <b>proporsi relatif</b> capex (penuh) vs opex (transparan), bukan nilai rupiah. Angka anggaran terperinci disusun pada dokumen komersial tersendiri dan perlu validasi perencanaan &amp; penganggaran resmi.</p>
+  </section>
+
+  <!-- ===== PRINSIP + RISIKO ===== -->
+  <section>
+    <div class="shead"><h2>Prinsip &amp; Risiko Lintas-Fase</h2></div>
+    <div class="cols2">
+      <div class="card">
+        <h3>Prinsip yang dijaga sepanjang 5 tahun</h3>
+        <div>
+          <span class="pill">Keputusan akhir oleh manusia</span>
+          <span class="pill">Analisis agregat, tanpa profiling warga (UU 27/2022)</span>
+          <span class="pill">Amplifikasi hanya via akun resmi</span>
+          <span class="pill">Jejak audit penuh</span>
+          <span class="pill">Zero Trust &amp; SOC 24/7</span>
+          <span class="pill">Transparansi &amp; faktual</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Risiko &amp; ketergantungan utama</h3>
+        <ul>
+          <li><b>Dasar hukum &amp; kelembagaan</b> — prasyarat Gate A; keterlambatan menggeser seluruh jadwal.</li>
+          <li><b>Integrasi data lintas instansi</b> — bergantung Satu Data &amp; kualitas data daerah.</li>
+          <li><b>Keamanan &amp; privasi</b> — menentukan kepercayaan publik; insiden berdampak reputasi.</li>
+          <li><b>Ketersediaan SDM analis terlatih</b> — jadi penentu kapasitas operasi 24/7.</li>
+          <li><b>Keberlanjutan anggaran lintas tahun</b> — komitmen multi-tahun diperlukan agar fase tidak terputus.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="foot">
+    Dokumen peta jalan ini adalah bagian dari prototipe BAKOM GCOS. Fase, cakupan, target KPI, dan pola investasi bersifat <b>indikatif</b> dan perlu divalidasi melalui perencanaan, penganggaran, serta kajian kelembagaan resmi. Dasar kelembagaan rujukan: Perpres 96/2025 tentang Badan Komunikasi Pemerintah; Permensesneg 9/2025. Seluruh data operasional pada prototipe adalah simulasi.
+  </div>
+
+</div>
+<script>
+(function(){
+  var r=document.documentElement;
+  try{ var t=localStorage.getItem("bakom-roadmap-theme"); if(t) r.dataset.theme=t; }catch(e){}
+  document.getElementById("themeBtn").onclick=function(){
+    var dark = r.dataset.theme ? r.dataset.theme==="dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+    r.dataset.theme = dark ? "light" : "dark";
+    try{ localStorage.setItem("bakom-roadmap-theme", r.dataset.theme); }catch(e){}
+  };
+})();
+</script>
+</body>
+</html>
